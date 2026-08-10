@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon ESG - BRSR Core Calculator & Reporting</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- SEO Optimization -->
+    <meta name="description" content="Carbon ESG is a comprehensive BRSR Core calculator for SEBI reporting. Calculate GHG, Water, Energy, Waste, Safety, Diversity, and Fairness metrics instantly.">
+    <meta name="keywords" content="BRSR Core, ESG Calculator, Carbon Footprint, SEBI Reporting, Sustainability, GHG Emissions, Scope 3">
+    <meta name="author" content="Carbon ESG">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Carbon ESG - BRSR Core Reporting">
+    <meta property="og:description" content="Calculate and visualize your BRSR Core metrics for SEBI ESG reporting seamlessly.">
+    <meta property="og:type" content="website">
+
+    <!-- Google Analytics (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        // Replace G-XXXXXXXXXX with your actual GA4 Measurement ID
+        gtag('config', 'G-XXXXXXXXXX'); 
+    </script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .nav-item.active { background-color: rgba(255,255,255,0.1); color: white; border-left: 4px solid #3b82f6; }
+        
+        /* Unified Input Styling */
+        input[type="number"], input[type="text"], select { 
+            width: 100%; 
+            padding: 0.5rem; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 0.375rem; 
+            margin-top: 0.25rem; 
+            background: #fff; 
+            color: #1e293b;
+            outline: none;
+            transition: all 0.2s;
+        }
+        input[type="number"]:focus, input[type="text"]:focus, select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        input:disabled, input[readonly] { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
+        label { font-weight: 500; font-size: 0.875rem; }
+        
+        /* Dark Mode Inputs */
+        html.dark input[type="number"], html.dark input[type="text"], html.dark select {
+            background-color: #1e293b; 
+            border-color: #475569; 
+            color: #f8fafc;
+        }
+        html.dark input:disabled, html.dark input[readonly] {
+            background-color: #0f172a; color: #94a3b8; border-color: #334155;
+        }
+        
+        /* Mobile Sidebar transitions */
+        .sidebar { transition: transform 0.3s ease-in-out; }
+        @media (max-width: 768px) {
+            .sidebar { position: absolute; z-index: 50; height: 100%; transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .overlay { display: none; }
+            .overlay.open { display: block; position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 via-blue-50 to-white dark:from-slate-900 dark:via-blue-900 dark:to-slate-800 font-sans flex h-screen overflow-hidden text-gray-800 dark:text-slate-200 transition-colors duration-300">
+
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar Navigation -->
+    <nav id="sidebar" class="sidebar w-64 bg-slate-900 text-gray-300 flex flex-col shadow-2xl flex-shrink-0">
+        <div class="p-4 bg-slate-950 flex items-center border-b border-slate-800">
+            <img src="logo.png" alt="Carbon ESG Logo" class="h-10 w-10 rounded-full mr-3 border border-slate-700">
+            <h1 class="text-xl font-bold text-white tracking-wide">Carbon ESG</h1>
+        </div>
+        <div class="overflow-y-auto flex-1 pb-4">
+            <ul class="flex-col">
+                <li class="px-4 mt-4 mb-2"><span class="text-xs uppercase text-slate-500 font-bold">Overview</span></li>
+                <li><button onclick="openTab('tab-dashboard'); toggleSidebarMobile();" id="nav-dashboard" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition"><i class="fa-solid fa-chart-pie w-6 text-blue-400"></i> Dashboard</button></li>
+                <li><button onclick="openTab('tab-globals'); toggleSidebarMobile();" id="nav-globals" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition"><i class="fa-solid fa-globe w-6 text-blue-400"></i> Global Variables</button></li>
+                
+                <li class="px-4 mt-6 mb-2"><span class="text-xs uppercase text-slate-500 font-bold">BRSR Core Principles</span></li>
+                <li><button onclick="openTab('tab-1'); toggleSidebarMobile();" id="nav-1" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-cloud w-6"></i> GHG Footprint</button></li>
+                <li><button onclick="openTab('tab-2'); toggleSidebarMobile();" id="nav-2" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-water w-6"></i> Water Footprint</button></li>
+                <li><button onclick="openTab('tab-3'); toggleSidebarMobile();" id="nav-3" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-bolt w-6"></i> Energy Footprint</button></li>
+                <li><button onclick="openTab('tab-4'); toggleSidebarMobile();" id="nav-4" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-trash w-6"></i> Waste Management</button></li>
+                <li><button onclick="openTab('tab-5'); toggleSidebarMobile();" id="nav-5" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-hard-hat w-6"></i> Safety & Wellbeing</button></li>
+                <li><button onclick="openTab('tab-6'); toggleSidebarMobile();" id="nav-6" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-venus-mars w-6"></i> Gender Diversity</button></li>
+                <li><button onclick="openTab('tab-7'); toggleSidebarMobile();" id="nav-7" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-hands-holding-circle w-6"></i> Inclusive Dev</button></li>
+                <li><button onclick="openTab('tab-8'); toggleSidebarMobile();" id="nav-8" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-handshake w-6"></i> Fairness</button></li>
+                <li><button onclick="openTab('tab-9'); toggleSidebarMobile();" id="nav-9" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-door-open w-6"></i> Openness</button></li>
+            </ul>
+        </div>
+        
+        <!-- Theme Toggle & Feedback -->
+        <div class="p-4 border-t border-slate-800 flex justify-center gap-6 text-xl">
+            <button onclick="toggleTheme()" class="text-slate-400 hover:text-white transition focus:outline-none" title="Toggle Theme">
+                <i id="theme-icon" class="fa-solid fa-sun"></i>
+            </button>
+            <a href="mailto:carbon.esgreports@gmail.com?subject=Carbon ESG Feedback & Feature Request" class="text-slate-400 hover:text-white transition" title="Report Issue / Request Feature">
+                <i class="fa-solid fa-envelope"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        
+        <!-- Mobile Header -->
+        <header class="md:hidden bg-slate-900 text-white p-4 flex items-center shadow-md">
+            <button onclick="toggleSidebar()" class="focus:outline-none p-2 mr-3 rounded hover:bg-slate-800">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <img src="logo.png" alt="Logo" class="h-8 w-8 rounded-full mr-2 border border-slate-700">
+            <span class="font-bold text-lg">Carbon ESG</span>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 md:p-8">
+
+            <!-- Dismissible Instruction Banner -->
+            <div id="instruction-banner" class="bg-blue-600 text-white p-4 flex justify-between items-center rounded-lg shadow-lg mb-6 transition-opacity">
+                <div>
+                    <i class="fa-solid fa-circle-info mr-2"></i>
+                    <strong>Instructions:</strong> Navigate through the tabs on the left, input your raw company data, and click "Calculate" at the bottom of each section to generate your BRSR Core metrics.
+                </div>
+                <button onclick="document.getElementById('instruction-banner').style.display='none'" class="text-blue-100 hover:text-white focus:outline-none ml-4"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            
+            <!-- DASHBOARD -->
+            <section id="tab-dashboard" class="tab-content active">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white drop-shadow-sm">Global Dashboard</h2>
+                    <button onclick="downloadPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center transition focus:outline-none">
+                        <i class="fa-solid fa-download mr-2"></i> Export PDF
+                    </button>
+                </div>
+                
+                <!-- PDF Export Area -->
+                <div id="dashboard-export-area" class="p-2 -mx-2 rounded-xl">
+                    <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 mb-8">
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">Company Profile</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div><span class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">Company Name</span><strong id="dash_meta_name" class="text-slate-800 dark:text-white text-base">-</strong></div>
+                            <div><span class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">CIN / Reg No</span><strong id="dash_meta_cin" class="text-slate-800 dark:text-white text-base">-</strong></div>
+                            <div><span class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">Financial Year</span><strong id="dash_meta_fy" class="text-slate-800 dark:text-white text-base">-</strong></div>
+                            <div><span class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">Reporting Officer</span><strong id="dash_meta_author" class="text-slate-800 dark:text-white text-base">-</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 flex flex-col items-center">
+                            <h3 class="text-lg font-semibold mb-4 text-center text-slate-700 dark:text-slate-200">Intensity Metrics (per Revenue)</h3>
+                            <div class="relative w-full h-72 flex-1">
+                                <canvas id="intensityChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 flex flex-col items-center">
+                            <h3 class="text-lg font-semibold mb-4 text-center text-slate-700 dark:text-slate-200">Key Performance Indicators (%)</h3>
+                            <div class="relative w-full h-72 flex-1">
+                                <canvas id="radarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GLOBAL VARIABLES -->
+            <section id="tab-globals" class="tab-content">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Global Variables (Denominators)</h2>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 max-w-2xl">
+                    
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 border-b border-blue-100 dark:border-slate-700 pb-2">Company Metadata</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="dark:text-slate-300">Company Name</label><input type="text" id="meta_name" placeholder="e.g. Acme Corp"></div>
+                        <div><label class="dark:text-slate-300">CIN / Registration No.</label><input type="text" id="meta_cin" placeholder="e.g. U12345MH2026PTC123456"></div>
+                        <div><label class="dark:text-slate-300">Financial Year</label><input type="text" id="meta_fy" placeholder="e.g. 2025-2026"></div>
+                        <div><label class="dark:text-slate-300">Reporting Officer</label><input type="text" id="meta_author" placeholder="e.g. Jane Doe"></div>
+                    </div>
+
+                    <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 mt-8 border-b border-blue-100 dark:border-slate-700 pb-2">Financial & Operational Metrics</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div><label class="dark:text-slate-300">Total Revenue (₹)</label><input type="number" id="g_revenue" value="100000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                        <div><label class="dark:text-slate-300">Total Employees (FTE)</label><input type="number" id="g_fte" value="500" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                        <div><label class="dark:text-slate-300">Total Working Hours (All Employees)</label><input type="number" id="g_hours" value="1040000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                    </div>
+                    
+                    <button onclick="calculateAll()" class="mt-8 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Save Globals & Calculate</button>
+                </div>
+            </section>
+
+            <!-- 1. GHG FOOTPRINT -->
+            <section id="tab-1" class="tab-content">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Green House Gas (GHG) Footprint</h2>
+                
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 mb-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <div class="flex justify-between items-center mb-4 border-b dark:border-slate-700 pb-2">
+                                <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">Emission Sources</h3>
+                                <button onclick="addGHGRow()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded text-sm transition"><i class="fa-solid fa-plus mr-1"></i> Add Source</button>
+                            </div>
+                            <div id="ghg-container" class="space-y-4 max-h-[28rem] overflow-y-auto pr-2"></div>
+                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Calculate</button>
+                        </div>
+                        
+                        <div class="flex flex-col gap-6">
+                            <div class="p-5 bg-blue-50/50 dark:bg-slate-900 rounded-lg border border-blue-200 dark:border-slate-700 shadow-inner">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Total Footprint</p>
+                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span id="res_ghg_total" class="font-mono font-bold">0.00</span> <span class="text-lg">tCO₂e</span></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">GHG Intensity</p>
+                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span id="res_ghg_intensity" class="font-mono font-bold">0.00</span> <span class="text-lg">/ ₹</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                                <canvas id="localChart_1"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                    <strong>Resources:</strong> IPCC EFDB, US EPA GHG Hub, UK DEFRA, India GHG Program.
+                </div>
+            </section>
+
+            <!-- 2. WATER FOOTPRINT -->
+            <section id="tab-2" class="tab-content">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Water Footprint</h2>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <div class="mb-6 p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-bold text-slate-700 dark:text-slate-200">Estimation Method (CGWA)</h4>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400">Calculate office consumption based on 45L/head/day.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="water_use_est" onchange="toggleWaterMode()" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-300 dark:bg-slate-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+
+                            <div id="water-direct-mode" class="space-y-6">
+                                <div>
+                                    <div class="flex justify-between items-center mb-2 border-b dark:border-slate-700 pb-1">
+                                        <h3 class="font-semibold text-blue-800 dark:text-blue-400"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Withdrawal</h3>
+                                        <button onclick="addWaterRow('withdrawal')" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 text-sm"><i class="fa-solid fa-plus"></i> Add</button>
+                                    </div>
+                                    <div id="water-withdrawal-container" class="space-y-2"></div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-2 border-b dark:border-slate-700 pb-1">
+                                        <h3 class="font-semibold text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Discharge</h3>
+                                        <button onclick="addWaterRow('discharge')" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 text-sm"><i class="fa-solid fa-plus"></i> Add</button>
+                                    </div>
+                                    <div id="water-discharge-container" class="space-y-2"></div>
+                                </div>
+                            </div>
+
+                            <div id="water-est-mode" style="display: none;" class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-blue-50 dark:bg-slate-900 p-4 rounded-lg border border-blue-100 dark:border-slate-700">
+                                <div><label class="dark:text-slate-300">Employees</label><input type="number" id="wat_est_emp" value="500" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Working Days</label><input type="number" id="wat_est_days" value="250" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            </div>
+                            
+                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Calculate</button>
+                        </div>
+                        
+                        <div class="flex flex-col gap-6">
+                            <div class="p-5 bg-blue-50/50 dark:bg-slate-900 rounded-lg border border-blue-200 dark:border-slate-700 shadow-inner">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Net Consumed</p>
+                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span id="res_wat_consumed" class="font-mono font-bold">0.00</span> <span class="text-lg">kL</span></p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Water Intensity</p>
+                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span id="res_wat_intensity" class="font-mono font-bold">0.00</span> <span class="text-lg">/ ₹</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                                <canvas id="localChart_2"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                    <strong>Resources:</strong> Central Ground Water Authority (CGWA) Guidelines.
+                </div>
+            </section>
+
+            <!-- 3. Energy -->
+            <section id="tab-3" class="tab-content">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Energy Footprint</h2>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div><label class="dark:text-slate-300">Renewable Sources (GJ)</label><input type="number" id="nrg_ren" value="2000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Non-Renewable Sources (GJ)</label><input type="number" id="nrg_non" value="8000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            </div>
+                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                        </div>
+                        <div class="flex flex-col gap-6">
+                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">Total Energy: <span id="res_nrg_total" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> GJ</p>
+                                <p class="dark:text-slate-300 mb-2">% Renewable: <span id="res_nrg_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                                <p class="dark:text-slate-300">Energy Intensity: <span id="res_nrg_intensity" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> / ₹</p>
+                            </div>
+                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                                <canvas id="localChart_3"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Waste -->
+            <section id="tab-4" class="tab-content">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Waste Management</h2>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div><label class="dark:text-slate-300">Total Waste Generated (MT)</label><input type="number" id="wst_gen" value="150" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Waste Recycled/Reused (MT)</label><input type="number" id="wst_rec" value="90" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Waste Sent to Disposal (MT)</label><input type="number" id="wst_disp" value="60" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            </div>
+                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                        </div>
+                        <div class="flex flex-col gap-6">
+                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">Waste Intensity: <span id="res_wst_intensity" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> / ₹</p>
+                                <p class="dark:text-slate-300">% Recycled: <span id="res_wst_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                            </div>
+                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                                <canvas id="localChart_4"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Safety -->
+            <section id="tab-5" class="tab-content">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Employee Well-being and Safety</h2>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div><label class="dark:text-slate-300">Well-being Spending (₹)</label><input type="number" id="saf_spend" value="1500000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Benefits Expense (₹)</label><input type="number" id="saf_totalben" value="25000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Lost Time Injuries (LTI)</label><input type="number" id="saf_lti" value="2" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            </div>
+                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                        </div>
+                        <div class="flex flex-col gap-6">
+                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">Well-being Spend %: <span id="res_saf_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                                <p class="dark:text-slate-300">LTIFR (Per 1M Hrs): <span id="res_saf_ltifr" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span></p>
+                            </div>
+                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                                <canvas id="localChart_5"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Gender Diversity -->
+            <section id="tab-6" class="tab-content">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Gender Diversity in Business</h2>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div><label class="dark:text-slate-300">Wages to Females (₹)</label><input type="number" id="div_wage_f" value="8000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Wages (₹)</label><input type="number" id="div_wage_t" value="25000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total POSH Complaints Filed</label><input type="number" id="div_posh_filed" value="3" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            </div>
+                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                        </div>
+                        <div class="flex flex-col gap-6">
+                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300">Female Wage Share: <span id="res_div_wage_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                            </div>
+                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                                <canvas id="localChart_6"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                    <strong>Resources:</strong> Prevention of Sexual Harassment (POSH) Act, 2013.
+                </div>
+            </section>
+
+            <!-- 7. Inclusive -->
+            <section id="tab-7" class="tab-content">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Inclusive Development</h2>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div><label class="dark:text-slate-300">MSME Purchases (₹)</label><input type="number" id="inc_msme" value="12000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Purchases (₹)</label><input type="number" id="inc_totalpur" value="40000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Small Town Wages (₹)</label><input type="number" id="inc_town_wages" value="5000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Wages (₹)</label><input type="number" id="inc_total_wages" value="25000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            </div>
+                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                        </div>
+                        <div class="flex flex-col gap-6">
+                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">MSME Share: <span id="res_inc_msme_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                                <p class="dark:text-slate-300">Small Town Wages: <span id="res_inc_town_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                            </div>
+                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                                <canvas id="localChart_7"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                    <strong>Resources:</strong> MSMED Act 2006, RBI Population Classification.
+                </div>
+            </section>
+
+            <!-- 8. Fairness -->
+            <section id="tab-8" class="tab-content">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Fairness in Engagement</h2>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div><label class="dark:text-slate-300">Customer Data Breaches</label><input type="number" id="fair_cust_breach" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Data Breaches</label><input type="number" id="fair_tot_breach" value="1" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Average Accounts Payable (₹)</label><input type="number" id="fair_ap" value="4500000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total COGS (₹)</label><input type="number" id="fair_cogs" value="30000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            </div>
+                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                        </div>
+                        <div class="flex flex-col gap-6">
+                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">Customer Breach Share: <span id="res_fair_breach_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                                <p class="dark:text-slate-300">Days Payable Outstanding: <span id="res_fair_dpo" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> Days</p>
+                            </div>
+                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                                <canvas id="localChart_8"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                    <strong>Resources:</strong> SPDI Rules 2011, CERT-In.
+                </div>
+            </section>
+
+            <!-- 9. Openness -->
+            <section id="tab-9" class="tab-content">
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Openness of Business</h2>
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <div class="grid grid-cols-1 gap-4">
+                                <div><label class="dark:text-slate-300">Top 10 Dealer Sales (₹)</label><input type="number" id="open_top10" value="20000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Dealer Sales (₹)</label><input type="number" id="open_totalsales" value="60000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Related Party Trans. (₹)</label><input type="number" id="open_rp" value="3000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Category Trans. (₹)</label><input type="number" id="open_totcat" value="100000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            </div>
+                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                        </div>
+                        <div class="flex flex-col gap-6">
+                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">Top 10 Concentration: <span id="res_open_con_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                                <p class="dark:text-slate-300">Related Party Trans.: <span id="res_open_rp_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                            </div>
+                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                                <canvas id="localChart_9"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                    <strong>Resources:</strong> SEBI LODR Regulations.
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- App Logic -->
+    <script>
+        "use strict";
+
+        // Global Analytics Wrapper
+        function trackEvent(action, params = {}) {
+            if (typeof gtag === 'function') {
+                const compName = document.getElementById('meta_name') ? document.getElementById('meta_name').value : 'Unknown';
+                const fy = document.getElementById('meta_fy') ? document.getElementById('meta_fy').value : 'Unknown';
+                gtag('event', action, {
+                    'company_name': compName,
+                    'financial_year': fy,
+                    ...params
+                });
+            }
+        }
+
+        const ghgFactors = {
+            "elec": { label: "Grid Electricity (CEA Default)", value: 0.72, unit: "MWh", scale: 1 }, 
+            "scooter": { label: "Scooter (<110 CC)", value: 0.0368, unit: "km", scale: 0.001 },
+            "moto": { label: "Motorcycle (<200 CC)", value: 0.0458, unit: "km", scale: 0.001 },
+            "car_p": { label: "Passenger Car (Petrol Avg)", value: 0.150, unit: "km", scale: 0.001 },
+            "car_d": { label: "Passenger Car (Diesel Avg)", value: 0.160, unit: "km", scale: 0.001 },
+            "bus": { label: "Bus (Intracity)", value: 0.015161, unit: "pax-km", scale: 0.001 },
+            "freight_l": { label: "Freight (LDV <3.5T)", value: 0.3070, unit: "km", scale: 0.001 },
+            "freight_h": { label: "Freight (HDV >12T)", value: 0.7375, unit: "km", scale: 0.001 },
+            "rail_p": { label: "Rail (Passenger Avg)", value: 0.0079, unit: "pax-km", scale: 0.001 },
+            "rail_f": { label: "Rail (Freight)", value: 0.00996, unit: "ton-km", scale: 0.001 },
+            "custom": { label: "Custom Factor (Direct tCO₂e)", value: 1, unit: "units", scale: 1 }
+        };
+
+        const waterSources = ["Surface Water", "Ground Water", "Third Party Water", "Sea Water", "Others"];
+
+        let ghgRowCount = 0;
+        let waterRowCounts = { withdrawal: 0, discharge: 0 };
+        let charts = { globalBar: null, globalRadar: null, l1: null, l2: null, l3: null, l4: null, l5: null, l6: null, l7: null, l8: null, l9: null };
+
+        function initTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            }
+            updateThemeIcon();
+            Chart.defaults.color = document.documentElement.classList.contains('dark') ? '#94a3b8' : '#475569';
+        }
+
+        function updateThemeIcon() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const icon = document.getElementById('theme-icon');
+            if(isDark) {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.contains('dark');
+            if (isDark) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+            updateThemeIcon();
+            Chart.defaults.color = !isDark ? '#94a3b8' : '#475569';
+            calculateAll();
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('mobile-overlay').classList.toggle('open');
+        }
+
+        function toggleSidebarMobile() {
+            if(window.innerWidth <= 768) toggleSidebar();
+        }
+
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('nav-' + tabId.replace('tab-', '')).classList.add('active');
+            
+            trackEvent('tab_view', { 'tab_id': tabId });
+
+            // Using setTimeout allows display:block to fully apply before calculating/rendering canvas
+            // This prevents Chart.js from animating awkwardly from the top-left corner
+            setTimeout(() => {
+                calculateAll();
+            }, 50);
+        }
+
+        // PDF Generation
+        function downloadPDF() {
+            trackEvent('download_pdf');
+            
+            const element = document.getElementById('dashboard-export-area');
+            const compName = document.getElementById('meta_name').value || 'Company_Report';
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            // Force a fixed width/layout temporarily so flex boxes don't wrap and overlap during export
+            const originalStyle = element.style.cssText;
+            element.style.width = '1200px';
+            element.style.maxWidth = '1200px';
+            element.style.padding = '20px';
+            element.style.background = isDark ? '#0f172a' : '#ffffff';
+            
+            const opt = {
+                margin:       0.5,
+                filename:     `${compName.replace(/\s+/g, '_')}_BRSR_Core.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, windowWidth: 1200, logging: false },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+            
+            setTimeout(() => {
+                html2pdf().set(opt).from(element).save().then(() => {
+                    // Restore responsive layout
+                    element.style.cssText = originalStyle;
+                });
+            }, 300);
+        }
+
+        function addGHGRow() {
+            ghgRowCount++;
+            const rowId = `ghg-row-${ghgRowCount}`;
+            let optionsHtml = '';
+            for (const [key, data] of Object.entries(ghgFactors)) {
+                optionsHtml += `<option value="${key}">${data.label}</option>`;
+            }
+
+            const rowHtml = `
+                <div id="${rowId}" class="ghg-entry bg-slate-50 dark:bg-slate-900/50 p-4 rounded border dark:border-slate-700 grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                    <div class="md:col-span-3">
+                        <label class="text-xs dark:text-slate-300">Description</label>
+                        <input type="text" class="ghg-desc text-sm" placeholder="e.g. Factory Power" value="Source ${ghgRowCount}">
+                    </div>
+                    <div class="md:col-span-3">
+                        <label class="text-xs dark:text-slate-300">Factor Source</label>
+                        <select onchange="updateGHGFactor('${rowId}')" class="ghg-select text-sm w-full border rounded p-2 dark:border-slate-600 dark:bg-slate-800">${optionsHtml}</select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="text-xs dark:text-slate-300">Factor Value</label>
+                        <input type="number" step="0.000001" class="ghg-factor text-sm" value="${ghgFactors['elec'].value}" readonly>
+                        <input type="hidden" class="ghg-scale" value="${ghgFactors['elec'].scale}">
+                    </div>
+                    <div class="md:col-span-3">
+                        <label class="text-xs dark:text-slate-300">Activity (<span class="ghg-unit">${ghgFactors['elec'].unit}</span>)</label>
+                        <input type="number" min="0" oninput="this.value = Math.abs(this.value)" class="ghg-activity text-sm" value="0" onkeyup="calculateAll()">
+                    </div>
+                    <div class="md:col-span-1 flex justify-between items-center pb-2">
+                        <span class="font-bold text-blue-600 dark:text-blue-400 ghg-row-total hidden">0.00</span>
+                        <div class="flex-1 text-right font-bold text-blue-600 dark:text-blue-400 ghg-row-total-display text-sm pr-2">0.00</div>
+                        <button onclick="removeElement('${rowId}')" class="text-red-500 hover:text-red-700 focus:outline-none"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('ghg-container').insertAdjacentHTML('beforeend', rowHtml);
+        }
+
+        function removeElement(rowId) {
+            const el = document.getElementById(rowId);
+            if (el) { el.remove(); calculateAll(); }
+        }
+
+        function updateGHGFactor(rowId) {
+            const row = document.getElementById(rowId);
+            if (!row) return;
+            const selectVal = row.querySelector('.ghg-select').value;
+            const factorInput = row.querySelector('.ghg-factor');
+            const data = ghgFactors[selectVal];
+            
+            row.querySelector('.ghg-unit').innerText = data.unit;
+            row.querySelector('.ghg-scale').value = data.scale;
+
+            if (selectVal === 'custom') {
+                factorInput.removeAttribute('readonly');
+                factorInput.value = 1;
+            } else {
+                factorInput.setAttribute('readonly', 'true');
+                factorInput.value = data.value;
+            }
+            calculateAll();
+        }
+
+        function toggleWaterMode() {
+            const isEst = document.getElementById('water_use_est').checked;
+            document.getElementById('water-direct-mode').style.display = isEst ? 'none' : 'block';
+            document.getElementById('water-est-mode').style.display = isEst ? 'grid' : 'none';
+            calculateAll();
+        }
+
+        function addWaterRow(type) {
+            waterRowCounts[type]++;
+            const rowId = `wat-${type}-${waterRowCounts[type]}`;
+            const optionsHtml = waterSources.map(s => `<option value="${s}">${s}</option>`).join('');
+            
+            const rowHtml = `
+                <div id="${rowId}" class="wat-entry flex gap-2 items-center">
+                    <select class="w-1/2 text-sm border rounded p-2 dark:border-slate-600 dark:bg-slate-800">${optionsHtml}</select>
+                    <div class="w-1/3 relative flex items-center">
+                        <input type="number" min="0" oninput="this.value = Math.abs(this.value)" class="wat-amount w-full text-sm border rounded p-2 dark:border-slate-600 dark:bg-slate-800" value="0" onkeyup="calculateAll()">
+                        <span class="absolute right-3 text-xs text-slate-400">kL</span>
+                    </div>
+                    <button onclick="removeElement('${rowId}')" class="text-red-400 hover:text-red-600 p-2 focus:outline-none"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            `;
+            document.getElementById(`water-${type}-container`).insertAdjacentHTML('beforeend', rowHtml);
+        }
+
+        function drawLocalChart(chartKey, canvasId, type, labels, dataArr, colors, useLogScale = false) {
+            const isDark = document.documentElement.classList.contains('dark');
+            const gridColor = isDark ? '#334155' : '#e2e8f0';
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            if(charts[chartKey]) charts[chartKey].destroy();
+            
+            let options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 800, easing: 'easeOutQuart' },
+                plugins: { legend: { position: 'bottom' } }
+            };
+
+            if (type === 'bar') {
+                options.scales = {
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { color: gridColor },
+                        type: useLogScale ? 'logarithmic' : 'linear'
+                    },
+                    x: { grid: { color: gridColor } }
+                };
+            }
+
+            charts[chartKey] = new Chart(ctx, {
+                type: type,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Value',
+                        data: dataArr,
+                        backgroundColor: colors,
+                        borderColor: isDark ? '#0f172a' : '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: options
+            });
+        }
+
+        function calculateAll() {
+            try {
+                const rev = parseFloat(document.getElementById('g_revenue').value) || 1;
+                const hours = parseFloat(document.getElementById('g_hours').value) || 1;
+
+                // Sync Global Meta Strings
+                document.getElementById('dash_meta_name').innerText = document.getElementById('meta_name').value || '-';
+                document.getElementById('dash_meta_cin').innerText = document.getElementById('meta_cin').value || '-';
+                document.getElementById('dash_meta_fy').innerText = document.getElementById('meta_fy').value || '-';
+                document.getElementById('dash_meta_author').innerText = document.getElementById('meta_author').value || '-';
+
+                // Track Calculation
+                trackEvent('calculate_metrics', { 'revenue': rev, 'fte': hours });
+
+                // 1. GHG
+                let totalGHG = 0;
+                let ghgLabels = [], ghgData = [];
+                let hasValidData = false;
+                
+                document.querySelectorAll('.ghg-entry').forEach(row => {
+                    const desc = row.querySelector('.ghg-desc').value || 'Unknown';
+                    const factor = parseFloat(row.querySelector('.ghg-factor').value) || 0;
+                    const activity = parseFloat(row.querySelector('.ghg-activity').value) || 0;
+                    const scale = parseFloat(row.querySelector('.ghg-scale').value) || 1;
+                    const rowTotal = factor * activity * scale;
+                    
+                    row.querySelector('.ghg-row-total').innerText = rowTotal.toFixed(2);
+                    row.querySelector('.ghg-row-total-display').innerText = rowTotal.toFixed(2);
+                    totalGHG += rowTotal;
+                    
+                    if(rowTotal > 0) { 
+                        ghgLabels.push(desc); 
+                        ghgData.push(rowTotal);
+                        hasValidData = true; 
+                    }
+                });
+                
+                if(!hasValidData) { ghgLabels=['No Data']; ghgData=[0]; }
+                
+                document.getElementById('res_ghg_total').innerText = totalGHG.toFixed(2);
+                document.getElementById('res_ghg_intensity').innerText = (totalGHG / rev).toFixed(8);
+                
+                // Enhanced contrasting color palette
+                const ghgColors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e'];
+                drawLocalChart('l1', 'localChart_1', 'bar', ghgLabels, ghgData, ghgColors, true);
+
+                // 2. Water
+                let w_con = 0, w_in_tot = 0, w_out_tot = 0;
+                if (document.getElementById('water_use_est').checked) {
+                    const emp = parseFloat(document.getElementById('wat_est_emp').value) || 0;
+                    const days = parseFloat(document.getElementById('wat_est_days').value) || 0;
+                    w_con = (emp * days * 45) / 1000;
+                    w_in_tot = w_con;
+                } else {
+                    document.querySelectorAll('#water-withdrawal-container .wat-amount').forEach(el => w_in_tot += (parseFloat(el.value) || 0));
+                    document.querySelectorAll('#water-discharge-container .wat-amount').forEach(el => w_out_tot += (parseFloat(el.value) || 0));
+                    w_con = Math.max(0, w_in_tot - w_out_tot);
+                }
+                document.getElementById('res_wat_consumed').innerText = w_con.toFixed(2);
+                document.getElementById('res_wat_intensity').innerText = (w_con / rev).toFixed(8);
+                drawLocalChart('l2', 'localChart_2', 'bar', ['Withdrawal', 'Discharge', 'Net Consumed'], [w_in_tot, w_out_tot, w_con], ['#0ea5e9', '#3b82f6', '#10b981']);
+
+                // 3. Energy
+                const e_ren = parseFloat(document.getElementById('nrg_ren').value) || 0;
+                const e_non = parseFloat(document.getElementById('nrg_non').value) || 0;
+                const e_tot = e_ren + e_non;
+                const e_perc = e_tot > 0 ? ((e_ren / e_tot) * 100).toFixed(2) : 0;
+                document.getElementById('res_nrg_total').innerText = e_tot.toFixed(2);
+                document.getElementById('res_nrg_perc').innerText = e_perc;
+                document.getElementById('res_nrg_intensity').innerText = (e_tot / rev).toFixed(8);
+                drawLocalChart('l3', 'localChart_3', 'doughnut', ['Renewable', 'Non-Renewable'], [e_ren, e_non], ['#10b981', '#64748b']);
+
+                // 4. Waste
+                const wst_g = parseFloat(document.getElementById('wst_gen').value) || 0;
+                const wst_r = parseFloat(document.getElementById('wst_rec').value) || 0;
+                const wst_d = parseFloat(document.getElementById('wst_disp').value) || 0;
+                document.getElementById('res_wst_intensity').innerText = (wst_g / rev).toFixed(8);
+                document.getElementById('res_wst_perc').innerText = wst_g > 0 ? ((wst_r / wst_g) * 100).toFixed(2) : 0;
+                const wst_oth = Math.max(0, wst_g - wst_r - wst_d);
+                drawLocalChart('l4', 'localChart_4', 'pie', ['Recycled', 'Disposed', 'Other'], [wst_r, wst_d, wst_oth], ['#10b981', '#f43f5e', '#94a3b8']);
+
+                // 5. Safety
+                const saf_s = parseFloat(document.getElementById('saf_spend').value) || 0;
+                const saf_tb = parseFloat(document.getElementById('saf_totalben').value) || 1;
+                const saf_l = parseFloat(document.getElementById('saf_lti').value) || 0;
+                const saf_perc = ((saf_s / saf_tb) * 100).toFixed(2);
+                document.getElementById('res_saf_perc').innerText = saf_perc;
+                document.getElementById('res_saf_ltifr').innerText = ((saf_l * 1000000) / hours).toFixed(2);
+                drawLocalChart('l5', 'localChart_5', 'doughnut', ['Well-being Spend', 'Other Benefits'], [saf_s, Math.max(0, saf_tb - saf_s)], ['#3b82f6', '#cbd5e1']);
+
+                // 6. Diversity
+                const div_wf = parseFloat(document.getElementById('div_wage_f').value) || 0;
+                const div_wt = parseFloat(document.getElementById('div_wage_t').value) || 1;
+                const div_wperc = ((div_wf / div_wt) * 100).toFixed(2);
+                document.getElementById('res_div_wage_perc').innerText = div_wperc;
+                drawLocalChart('l6', 'localChart_6', 'pie', ['Female Wages', 'Other Wages'], [div_wf, Math.max(0, div_wt - div_wf)], ['#8b5cf6', '#cbd5e1']);
+
+                // 7. Inclusive
+                const inc_m = parseFloat(document.getElementById('inc_msme').value) || 0;
+                const inc_tp = parseFloat(document.getElementById('inc_totalpur').value) || 1;
+                const inc_tw = parseFloat(document.getElementById('inc_town_wages').value) || 0;
+                const inc_ttw = parseFloat(document.getElementById('inc_total_wages').value) || 1;
+                const m_perc = ((inc_m / inc_tp) * 100).toFixed(2);
+                const t_perc = ((inc_tw / inc_ttw) * 100).toFixed(2);
+                document.getElementById('res_inc_msme_perc').innerText = m_perc;
+                document.getElementById('res_inc_town_perc').innerText = t_perc;
+                drawLocalChart('l7', 'localChart_7', 'bar', ['MSME Purchases', 'Small Town Wages'], [inc_m, inc_tw], ['#f59e0b', '#3b82f6']);
+
+                // 8. Fairness
+                const f_cb = parseFloat(document.getElementById('fair_cust_breach').value) || 0;
+                const f_tb = parseFloat(document.getElementById('fair_tot_breach').value) || 1;
+                const f_ap = parseFloat(document.getElementById('fair_ap').value) || 0;
+                const f_cogs = parseFloat(document.getElementById('fair_cogs').value) || 1;
+                document.getElementById('res_fair_breach_perc').innerText = f_tb > 0 ? ((f_cb / f_tb) * 100).toFixed(2) : 0;
+                document.getElementById('res_fair_dpo').innerText = ((f_ap / f_cogs) * 365).toFixed(0);
+                drawLocalChart('l8', 'localChart_8', 'doughnut', ['Customer Breaches', 'Other Breaches'], [f_cb, Math.max(0, f_tb - f_cb)], ['#ef4444', '#cbd5e1']);
+
+                // 9. Openness
+                const o_t10 = parseFloat(document.getElementById('open_top10').value) || 0;
+                const o_ts = parseFloat(document.getElementById('open_totalsales').value) || 1;
+                const o_rp = parseFloat(document.getElementById('open_rp').value) || 0;
+                const o_tc = parseFloat(document.getElementById('open_totcat').value) || 1;
+                const o_rpperc = ((o_rp / o_tc) * 100).toFixed(2);
+                document.getElementById('res_open_con_perc').innerText = ((o_t10 / o_ts) * 100).toFixed(2);
+                document.getElementById('res_open_rp_perc').innerText = o_rpperc;
+                drawLocalChart('l9', 'localChart_9', 'bar', ['Top 10 Sales', 'Related Party Trans.'], [o_t10, o_rp], ['#6366f1', '#a855f7']);
+
+                // Update Globals
+                updateGlobalCharts(
+                    (totalGHG / rev * 1000000).toFixed(2), 
+                    (w_con / rev * 1000000).toFixed(2),
+                    (e_tot / rev * 1000000).toFixed(2),
+                    (wst_g / rev * 1000000).toFixed(2),
+                    e_perc, saf_perc, div_wperc, m_perc, o_rpperc
+                );
+
+            } catch (error) { console.error("Calculation Error:", error); }
+        }
+
+        function updateGlobalCharts(ghg, wat, eng, wst, pRen, pSafe, pDiv, pMsme, pRP) {
+            const isDark = document.documentElement.classList.contains('dark');
+            const gridColor = isDark ? '#334155' : '#e2e8f0';
+
+            const barCtx = document.getElementById('intensityChart').getContext('2d');
+            if (charts.globalBar) charts.globalBar.destroy();
+            charts.globalBar = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['GHG', 'Water', 'Energy', 'Waste'],
+                    datasets: [{
+                        label: 'Intensity (Scaled x 1M per ₹)',
+                        data: [ghg, wat, eng, wst],
+                        backgroundColor: ['#3b82f6', '#0ea5e9', '#0284c7', '#0369a1'],
+                        borderRadius: 4
+                    }]
+                },
+                options: { 
+                    responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+                    animation: { duration: 800, easing: 'easeOutQuart' },
+                    scales: { y: { grid: { color: gridColor } }, x: { grid: { color: gridColor } } }
+                }
+            });
+
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            if (charts.globalRadar) charts.globalRadar.destroy();
+            charts.globalRadar = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Renewable %', 'Well-being %', 'Female Wage %', 'MSME %', 'Related Party %'],
+                    datasets: [{
+                        label: 'Performance',
+                        data: [pRen, pSafe, pDiv, pMsme, pRP],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: '#3b82f6',
+                        pointBackgroundColor: '#2563eb'
+                    }]
+                },
+                options: { 
+                    responsive: true, maintainAspectRatio: false,
+                    animation: { duration: 800, easing: 'easeOutQuart' },
+                    scales: { r: { min: 0, max: 100, grid: { color: gridColor }, angleLines: { color: gridColor } } } 
+                }
+            });
+        }
+
+        // Boot
+        window.onload = () => {
+            initTheme();
+            addGHGRow(); 
+            addWaterRow('withdrawal');
+            addWaterRow('discharge');
+            calculateAll();
+        };
+    </script>
+</body>
+</html>
