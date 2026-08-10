@@ -177,31 +177,32 @@
 
                 <li class="px-4 mt-6 mb-2"><span class="text-xs uppercase text-slate-500 font-bold">BRSR Core
                         Principles</span></li>
-                <li><button onclick="openTab('tab-1'); toggleSidebarMobile();" id="nav-1"
+                <!-- Updated IDs to match descriptive names -->
+                <li><button onclick="openTab('tab-ghg-footprint'); toggleSidebarMobile();" id="nav-ghg-footprint"
                         class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
                             class="fa-solid fa-cloud w-6"></i> GHG Footprint</button></li>
-                <li><button onclick="openTab('tab-2'); toggleSidebarMobile();" id="nav-2"
+                <li><button onclick="openTab('tab-water-footprint'); toggleSidebarMobile();" id="nav-water-footprint"
                         class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
                             class="fa-solid fa-water w-6"></i> Water Footprint</button></li>
-                <li><button onclick="openTab('tab-3'); toggleSidebarMobile();" id="nav-3"
+                <li><button onclick="openTab('tab-energy-footprint'); toggleSidebarMobile();" id="nav-energy-footprint"
                         class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
                             class="fa-solid fa-bolt w-6"></i> Energy Footprint</button></li>
-                <li><button onclick="openTab('tab-4'); toggleSidebarMobile();" id="nav-4"
+                <li><button onclick="openTab('tab-waste-management'); toggleSidebarMobile();" id="nav-waste-management"
                         class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
                             class="fa-solid fa-trash w-6"></i> Waste Management</button></li>
-                <li><button onclick="openTab('tab-5'); toggleSidebarMobile();" id="nav-5"
+                <li><button onclick="openTab('tab-safety-wellbeing'); toggleSidebarMobile();" id="nav-safety-wellbeing"
                         class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
                             class="fa-solid fa-hard-hat w-6"></i> Safety & Wellbeing</button></li>
-                <li><button onclick="openTab('tab-6'); toggleSidebarMobile();" id="nav-6"
+                <li><button onclick="openTab('tab-gender-diversity'); toggleSidebarMobile();" id="nav-gender-diversity"
                         class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
                             class="fa-solid fa-venus-mars w-6"></i> Gender Diversity</button></li>
-                <li><button onclick="openTab('tab-7'); toggleSidebarMobile();" id="nav-7"
+                <li><button onclick="openTab('tab-inclusive-dev'); toggleSidebarMobile();" id="nav-inclusive-dev"
                         class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
                             class="fa-solid fa-hands-holding-circle w-6"></i> Inclusive Dev</button></li>
-                <li><button onclick="openTab('tab-8'); toggleSidebarMobile();" id="nav-8"
+                <li><button onclick="openTab('tab-fairness'); toggleSidebarMobile();" id="nav-fairness"
                         class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
                             class="fa-solid fa-handshake w-6"></i> Fairness</button></li>
-                <li><button onclick="openTab('tab-9'); toggleSidebarMobile();" id="nav-9"
+                <li><button onclick="openTab('tab-openness'); toggleSidebarMobile();" id="nav-openness"
                         class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
                             class="fa-solid fa-door-open w-6"></i> Openness</button></li>
             </ul>
@@ -209,7 +210,6 @@
 
         <!-- Theme Toggle & Feedback -->
         <div class="p-4 border-t border-slate-800 flex justify-center gap-6 text-xl">
-            <!-- Added aria-label -->
             <button aria-label="Toggle Theme" onclick="toggleTheme()" class="text-slate-400 hover:text-white transition focus:outline-none"
                 title="Toggle Theme">
                 <i id="theme-icon" class="fa-solid fa-sun"></i>
@@ -348,7 +348,8 @@
             </section>
 
             <!-- 1. GHG FOOTPRINT -->
-            <section id="tab-1" class="tab-content">
+            <!-- Updated IDs to match descriptive names -->
+            <section id="tab-ghg-footprint" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Green House Gas (GHG) Footprint</h2>
 
                 <div
@@ -404,7 +405,7 @@
             </section>
 
             <!-- 2. WATER FOOTPRINT -->
-            <section id="tab-2" class="tab-content">
+            <section id="tab-water-footprint" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Water Footprint</h2>
                 <div
                     class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
@@ -502,7 +503,7 @@
             </section>
 
             <!-- 3. Energy -->
-            <section id="tab-3" class="tab-content">
+            <section id="tab-energy-footprint" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Energy Footprint</h2>
                 <div
                     class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
@@ -542,7 +543,7 @@
             </section>
 
             <!-- 4. Waste -->
-            <section id="tab-4" class="tab-content">
+            <section id="tab-waste-management" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Waste Management</h2>
                 <div
                     class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
@@ -582,7 +583,7 @@
             </section>
 
             <!-- 5. Safety -->
-            <section id="tab-5" class="tab-content">
+            <section id="tab-safety-wellbeing" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Employee Well-being and Safety</h2>
                 <div
                     class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
@@ -622,7 +623,7 @@
             </section>
 
             <!-- 6. Gender Diversity -->
-            <section id="tab-6" class="tab-content">
+            <section id="tab-gender-diversity" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Gender Diversity in Business</h2>
                 <div
                     class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
@@ -663,7 +664,7 @@
             </section>
 
             <!-- 7. Inclusive -->
-            <section id="tab-7" class="tab-content">
+            <section id="tab-inclusive-dev" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Inclusive Development</h2>
                 <div
                     class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
@@ -710,7 +711,7 @@
             </section>
 
             <!-- 8. Fairness -->
-            <section id="tab-8" class="tab-content">
+            <section id="tab-fairness" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Fairness in Engagement</h2>
                 <div
                     class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
@@ -758,7 +759,7 @@
             </section>
 
             <!-- 9. Openness -->
-            <section id="tab-9" class="tab-content">
+            <section id="tab-openness" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Openness of Business</h2>
                 <div
                     class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
@@ -810,6 +811,10 @@
     <!-- App Logic -->
     <script>
         "use strict";
+
+        // Global variables for tracking time spent per tab
+        let tabStartTime = Date.now();
+        let currentTab = 'tab-dashboard';
 
         // Global Analytics Wrapper
         function trackEvent(action, params = {}) {
@@ -891,6 +896,21 @@
         }
 
         function openTab(tabId) {
+            // Added GA4 Virtual Pageview and Section Tracking
+            const timeSpentOnPreviousTab = Math.round((Date.now() - tabStartTime) / 1000); 
+
+            // Log time spent on the tab the user is leaving
+            if (timeSpentOnPreviousTab > 0) {
+                trackEvent('section_time_spent', {
+                    'section_id': currentTab,
+                    'time_seconds': timeSpentOnPreviousTab
+                });
+            }
+
+            // Update active tab & timer
+            currentTab = tabId;
+            tabStartTime = Date.now();
+
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
@@ -898,12 +918,29 @@
 
             trackEvent('tab_view', { 'tab_id': tabId });
 
+            // Send Virtual Pageview to GA4 for standard Page Reports
+            if (typeof gtag === 'function') {
+                gtag('event', 'page_view', {
+                    'page_title': tabId.replace('tab-', '').toUpperCase(),
+                    'page_location': window.location.origin + '/' + tabId
+                });
+            }
+
             // Using setTimeout allows display:block to fully apply before calculating/rendering canvas
             // This prevents Chart.js from animating awkwardly from the top-left corner
             setTimeout(() => {
                 calculateAll();
             }, 50);
         }
+
+        // Add an event listener to track when ANY form field is changed
+        document.addEventListener('change', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
+                trackEvent('field_input_changed', {
+                    'field_id': e.target.id || e.target.className
+                });
+            }
+        });
 
         // PDF Generation
         function downloadPDF() {
@@ -938,6 +975,9 @@
 
         function addGHGRow() {
             ghgRowCount++;
+            // Log interaction to GA4
+            trackEvent('add_ghg_source', { 'total_sources': ghgRowCount });
+
             const rowId = `ghg-row-${ghgRowCount}`;
             let optionsHtml = '';
             for (const [key, data] of Object.entries(ghgFactors)) {
@@ -1007,6 +1047,7 @@
 
         function addWaterRow(type) {
             waterRowCounts[type]++;
+            trackEvent('add_water_row', { 'type': type });
             const rowId = `wat-${type}-${waterRowCounts[type]}`;
             const optionsHtml = waterSources.map(s => `<option value="${s}">${s}</option>`).join('');
 
