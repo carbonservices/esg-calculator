@@ -1,92 +1,155 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carbon ESG - BRSR Core Calculator & Reporting</title>
     <link rel="icon" type="image/png" href="logo.png">
-    
+
     <!-- SEO Optimization -->
-    <meta name="description" content="Carbon ESG is a comprehensive BRSR Core calculator for SEBI reporting. Calculate GHG, Water, Energy, Waste, Safety, Diversity, and Fairness metrics instantly.">
-    <meta name="keywords" content="BRSR Core, ESG Calculator, Carbon Footprint, SEBI Reporting, Sustainability, GHG Emissions, Scope 3">
+    <meta name="description"
+        content="Carbon ESG is a comprehensive BRSR Core calculator for SEBI reporting. Calculate GHG, Water, Energy, Waste, Safety, Diversity, and Fairness metrics instantly.">
+    <meta name="keywords"
+        content="BRSR Core, ESG Calculator, Carbon Footprint, SEBI Reporting, Sustainability, GHG Emissions, Scope 3">
     <meta name="author" content="Carbon ESG">
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="Carbon ESG - BRSR Core Reporting">
-    <meta property="og:description" content="Calculate and visualize your BRSR Core metrics for SEBI ESG reporting seamlessly.">
+    <meta property="og:description"
+        content="Calculate and visualize your BRSR Core metrics for SEBI ESG reporting seamlessly.">
     <meta property="og:type" content="website">
 
     <!-- Google Analytics (GA4) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RRCLPN2T1D"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-        // Replace G-XXXXXXXXXX with your actual GA4 Measurement ID
-        gtag('config', 'G-XXXXXXXXXX'); 
+
+        gtag('config', 'G-RRCLPN2T1D');
     </script>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
         }
     </script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .tab-content {
+            display: none;
         }
 
-        .nav-item.active { background-color: rgba(255,255,255,0.1); color: white; border-left: 4px solid #3b82f6; }
-        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid #3b82f6;
+        }
+
         /* Unified Input Styling */
-        input[type="number"], input[type="text"], select { 
-            width: 100%; 
-            padding: 0.5rem; 
-            border: 1px solid #cbd5e1; 
-            border-radius: 0.375rem; 
-            margin-top: 0.25rem; 
-            background: #fff; 
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.375rem;
+            margin-top: 0.25rem;
+            background: #fff;
             color: #1e293b;
             outline: none;
             transition: all 0.2s;
         }
-        input[type="number"]:focus, input[type="text"]:focus, select:focus {
+
+        input[type="number"]:focus,
+        input[type="text"]:focus,
+        select:focus {
             border-color: #3b82f6;
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
-        input:disabled, input[readonly] { background-color: #f1f5f9; color: #64748b; cursor: not-allowed; }
-        label { font-weight: 500; font-size: 0.875rem; }
-        
+
+        input:disabled,
+        input[readonly] {
+            background-color: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        label {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
         /* Dark Mode Inputs */
-        html.dark input[type="number"], html.dark input[type="text"], html.dark select {
-            background-color: #1e293b; 
-            border-color: #475569; 
+        html.dark input[type="number"],
+        html.dark input[type="text"],
+        html.dark select {
+            background-color: #1e293b;
+            border-color: #475569;
             color: #f8fafc;
         }
-        html.dark input:disabled, html.dark input[readonly] {
-            background-color: #0f172a; color: #94a3b8; border-color: #334155;
+
+        html.dark input:disabled,
+        html.dark input[readonly] {
+            background-color: #0f172a;
+            color: #94a3b8;
+            border-color: #334155;
         }
-        
+
         /* Mobile Sidebar transitions */
-        .sidebar { transition: transform 0.3s ease-in-out; }
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+
         @media (max-width: 768px) {
-            .sidebar { position: absolute; z-index: 50; height: 100%; transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-            .overlay { display: none; }
-            .overlay.open { display: block; position: absolute; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; }
+            .sidebar {
+                position: absolute;
+                z-index: 50;
+                height: 100%;
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .overlay {
+                display: none;
+            }
+
+            .overlay.open {
+                display: block;
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-100 via-blue-50 to-white dark:from-slate-900 dark:via-blue-900 dark:to-slate-800 font-sans flex h-screen overflow-hidden text-gray-800 dark:text-slate-200 transition-colors duration-300">
+
+<body
+    class="bg-gradient-to-br from-blue-100 via-blue-50 to-white dark:from-slate-900 dark:via-blue-900 dark:to-slate-800 font-sans flex h-screen overflow-hidden text-gray-800 dark:text-slate-200 transition-colors duration-300">
 
     <!-- Mobile Overlay -->
     <div id="mobile-overlay" class="overlay" onclick="toggleSidebar()"></div>
@@ -100,28 +163,53 @@
         <div class="overflow-y-auto flex-1 pb-4">
             <ul class="flex-col">
                 <li class="px-4 mt-4 mb-2"><span class="text-xs uppercase text-slate-500 font-bold">Overview</span></li>
-                <li><button onclick="openTab('tab-dashboard'); toggleSidebarMobile();" id="nav-dashboard" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition"><i class="fa-solid fa-chart-pie w-6 text-blue-400"></i> Dashboard</button></li>
-                <li><button onclick="openTab('tab-globals'); toggleSidebarMobile();" id="nav-globals" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition"><i class="fa-solid fa-globe w-6 text-blue-400"></i> Global Variables</button></li>
-                
-                <li class="px-4 mt-6 mb-2"><span class="text-xs uppercase text-slate-500 font-bold">BRSR Core Principles</span></li>
-                <li><button onclick="openTab('tab-1'); toggleSidebarMobile();" id="nav-1" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-cloud w-6"></i> GHG Footprint</button></li>
-                <li><button onclick="openTab('tab-2'); toggleSidebarMobile();" id="nav-2" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-water w-6"></i> Water Footprint</button></li>
-                <li><button onclick="openTab('tab-3'); toggleSidebarMobile();" id="nav-3" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-bolt w-6"></i> Energy Footprint</button></li>
-                <li><button onclick="openTab('tab-4'); toggleSidebarMobile();" id="nav-4" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-trash w-6"></i> Waste Management</button></li>
-                <li><button onclick="openTab('tab-5'); toggleSidebarMobile();" id="nav-5" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-hard-hat w-6"></i> Safety & Wellbeing</button></li>
-                <li><button onclick="openTab('tab-6'); toggleSidebarMobile();" id="nav-6" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-venus-mars w-6"></i> Gender Diversity</button></li>
-                <li><button onclick="openTab('tab-7'); toggleSidebarMobile();" id="nav-7" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-hands-holding-circle w-6"></i> Inclusive Dev</button></li>
-                <li><button onclick="openTab('tab-8'); toggleSidebarMobile();" id="nav-8" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-handshake w-6"></i> Fairness</button></li>
-                <li><button onclick="openTab('tab-9'); toggleSidebarMobile();" id="nav-9" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i class="fa-solid fa-door-open w-6"></i> Openness</button></li>
+                <li><button onclick="openTab('tab-dashboard'); toggleSidebarMobile();" id="nav-dashboard"
+                        class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-chart-pie w-6 text-blue-400"></i> Dashboard</button></li>
+                <li><button onclick="openTab('tab-globals'); toggleSidebarMobile();" id="nav-globals"
+                        class="nav-item w-full text-left px-6 py-3 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-globe w-6 text-blue-400"></i> Global Variables</button></li>
+
+                <li class="px-4 mt-6 mb-2"><span class="text-xs uppercase text-slate-500 font-bold">BRSR Core
+                        Principles</span></li>
+                <li><button onclick="openTab('tab-1'); toggleSidebarMobile();" id="nav-1"
+                        class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-cloud w-6"></i> GHG Footprint</button></li>
+                <li><button onclick="openTab('tab-2'); toggleSidebarMobile();" id="nav-2"
+                        class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-water w-6"></i> Water Footprint</button></li>
+                <li><button onclick="openTab('tab-3'); toggleSidebarMobile();" id="nav-3"
+                        class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-bolt w-6"></i> Energy Footprint</button></li>
+                <li><button onclick="openTab('tab-4'); toggleSidebarMobile();" id="nav-4"
+                        class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-trash w-6"></i> Waste Management</button></li>
+                <li><button onclick="openTab('tab-5'); toggleSidebarMobile();" id="nav-5"
+                        class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-hard-hat w-6"></i> Safety & Wellbeing</button></li>
+                <li><button onclick="openTab('tab-6'); toggleSidebarMobile();" id="nav-6"
+                        class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-venus-mars w-6"></i> Gender Diversity</button></li>
+                <li><button onclick="openTab('tab-7'); toggleSidebarMobile();" id="nav-7"
+                        class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-hands-holding-circle w-6"></i> Inclusive Dev</button></li>
+                <li><button onclick="openTab('tab-8'); toggleSidebarMobile();" id="nav-8"
+                        class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-handshake w-6"></i> Fairness</button></li>
+                <li><button onclick="openTab('tab-9'); toggleSidebarMobile();" id="nav-9"
+                        class="nav-item w-full text-left px-6 py-2 hover:bg-slate-800 transition"><i
+                            class="fa-solid fa-door-open w-6"></i> Openness</button></li>
             </ul>
         </div>
-        
+
         <!-- Theme Toggle & Feedback -->
         <div class="p-4 border-t border-slate-800 flex justify-center gap-6 text-xl">
-            <button onclick="toggleTheme()" class="text-slate-400 hover:text-white transition focus:outline-none" title="Toggle Theme">
+            <button onclick="toggleTheme()" class="text-slate-400 hover:text-white transition focus:outline-none"
+                title="Toggle Theme">
                 <i id="theme-icon" class="fa-solid fa-sun"></i>
             </button>
-            <a href="mailto:carbon.esgreports@gmail.com?subject=Carbon ESG Feedback & Feature Request" class="text-slate-400 hover:text-white transition" title="Report Issue / Request Feature">
+            <a href="mailto:carbon.esgreports@gmail.com?subject=Carbon ESG Feedback & Feature Request"
+                class="text-slate-400 hover:text-white transition" title="Report Issue / Request Feature">
                 <i class="fa-solid fa-envelope"></i>
             </a>
         </div>
@@ -129,7 +217,7 @@
 
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
-        
+
         <!-- Mobile Header -->
         <header class="md:hidden bg-slate-900 text-white p-4 flex items-center shadow-md">
             <button onclick="toggleSidebar()" class="focus:outline-none p-2 mr-3 rounded hover:bg-slate-800">
@@ -142,44 +230,69 @@
         <main class="flex-1 overflow-y-auto p-4 md:p-8">
 
             <!-- Dismissible Instruction Banner -->
-            <div id="instruction-banner" class="bg-blue-600 text-white p-4 flex justify-between items-center rounded-lg shadow-lg mb-6 transition-opacity">
+            <div id="instruction-banner"
+                class="bg-blue-600 text-white p-4 flex justify-between items-center rounded-lg shadow-lg mb-6 transition-opacity">
                 <div>
                     <i class="fa-solid fa-circle-info mr-2"></i>
-                    <strong>Instructions:</strong> Navigate through the tabs on the left, input your raw company data, and click "Calculate" at the bottom of each section to generate your BRSR Core metrics.
+                    <strong>Instructions:</strong> Navigate through the tabs on the left, input your raw company data,
+                    and click "Calculate" at the bottom of each section to generate your BRSR Core metrics.
                 </div>
-                <button onclick="document.getElementById('instruction-banner').style.display='none'" class="text-blue-100 hover:text-white focus:outline-none ml-4"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <button onclick="document.getElementById('instruction-banner').style.display='none'"
+                    class="text-blue-100 hover:text-white focus:outline-none ml-4"><i
+                        class="fa-solid fa-xmark text-xl"></i></button>
             </div>
-            
+
             <!-- DASHBOARD -->
             <section id="tab-dashboard" class="tab-content active">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white drop-shadow-sm">Global Dashboard</h2>
-                    <button onclick="downloadPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center transition focus:outline-none">
+                    <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white drop-shadow-sm">Global Dashboard
+                    </h2>
+                    <button onclick="downloadPDF()"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center transition focus:outline-none">
                         <i class="fa-solid fa-download mr-2"></i> Export PDF
                     </button>
                 </div>
-                
+
                 <!-- PDF Export Area -->
                 <div id="dashboard-export-area" class="p-2 -mx-2 rounded-xl">
-                    <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 mb-8">
-                        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">Company Profile</h3>
+                    <div
+                        class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 mb-8">
+                        <h3
+                            class="text-lg font-bold text-slate-800 dark:text-white mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">
+                            Company Profile</h3>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                            <div><span class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">Company Name</span><strong id="dash_meta_name" class="text-slate-800 dark:text-white text-base">-</strong></div>
-                            <div><span class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">CIN / Reg No</span><strong id="dash_meta_cin" class="text-slate-800 dark:text-white text-base">-</strong></div>
-                            <div><span class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">Financial Year</span><strong id="dash_meta_fy" class="text-slate-800 dark:text-white text-base">-</strong></div>
-                            <div><span class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">Reporting Officer</span><strong id="dash_meta_author" class="text-slate-800 dark:text-white text-base">-</strong></div>
+                            <div><span
+                                    class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">Company
+                                    Name</span><strong id="dash_meta_name"
+                                    class="text-slate-800 dark:text-white text-base">-</strong></div>
+                            <div><span
+                                    class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">CIN
+                                    / Reg No</span><strong id="dash_meta_cin"
+                                    class="text-slate-800 dark:text-white text-base">-</strong></div>
+                            <div><span
+                                    class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">Financial
+                                    Year</span><strong id="dash_meta_fy"
+                                    class="text-slate-800 dark:text-white text-base">-</strong></div>
+                            <div><span
+                                    class="text-slate-500 dark:text-slate-400 block mb-1 uppercase font-bold text-xs tracking-wider">Reporting
+                                    Officer</span><strong id="dash_meta_author"
+                                    class="text-slate-800 dark:text-white text-base">-</strong></div>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 flex flex-col items-center">
-                            <h3 class="text-lg font-semibold mb-4 text-center text-slate-700 dark:text-slate-200">Intensity Metrics (per Revenue)</h3>
+                        <div
+                            class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 flex flex-col items-center">
+                            <h3 class="text-lg font-semibold mb-4 text-center text-slate-700 dark:text-slate-200">
+                                Intensity Metrics (per Revenue)</h3>
                             <div class="relative w-full h-72 flex-1">
                                 <canvas id="intensityChart"></canvas>
                             </div>
                         </div>
-                        <div class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 flex flex-col items-center">
-                            <h3 class="text-lg font-semibold mb-4 text-center text-slate-700 dark:text-slate-200">Key Performance Indicators (%)</h3>
+                        <div
+                            class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 flex flex-col items-center">
+                            <h3 class="text-lg font-semibold mb-4 text-center text-slate-700 dark:text-slate-200">Key
+                                Performance Indicators (%)</h3>
                             <div class="relative w-full h-72 flex-1">
                                 <canvas id="radarChart"></canvas>
                             </div>
@@ -191,63 +304,95 @@
             <!-- GLOBAL VARIABLES -->
             <section id="tab-globals" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Global Variables (Denominators)</h2>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 max-w-2xl">
-                    
-                    <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 border-b border-blue-100 dark:border-slate-700 pb-2">Company Metadata</h3>
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 max-w-2xl">
+
+                    <h3
+                        class="text-lg font-bold text-slate-800 dark:text-white mb-4 border-b border-blue-100 dark:border-slate-700 pb-2">
+                        Company Metadata</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div><label class="dark:text-slate-300">Company Name</label><input type="text" id="meta_name" placeholder="e.g. Acme Corp"></div>
-                        <div><label class="dark:text-slate-300">CIN / Registration No.</label><input type="text" id="meta_cin" placeholder="e.g. U12345MH2026PTC123456"></div>
-                        <div><label class="dark:text-slate-300">Financial Year</label><input type="text" id="meta_fy" placeholder="e.g. 2025-2026"></div>
-                        <div><label class="dark:text-slate-300">Reporting Officer</label><input type="text" id="meta_author" placeholder="e.g. Jane Doe"></div>
+                        <div><label class="dark:text-slate-300">Company Name</label><input type="text" id="meta_name"
+                                placeholder="e.g. Acme Corp"></div>
+                        <div><label class="dark:text-slate-300">CIN / Registration No.</label><input type="text"
+                                id="meta_cin" placeholder="e.g. U12345MH2026PTC123456"></div>
+                        <div><label class="dark:text-slate-300">Financial Year</label><input type="text" id="meta_fy"
+                                placeholder="e.g. 2025-2026"></div>
+                        <div><label class="dark:text-slate-300">Reporting Officer</label><input type="text"
+                                id="meta_author" placeholder="e.g. Jane Doe"></div>
                     </div>
 
-                    <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 mt-8 border-b border-blue-100 dark:border-slate-700 pb-2">Financial & Operational Metrics</h3>
+                    <h3
+                        class="text-lg font-bold text-slate-800 dark:text-white mb-4 mt-8 border-b border-blue-100 dark:border-slate-700 pb-2">
+                        Financial & Operational Metrics</h3>
                     <div class="grid grid-cols-1 gap-4">
-                        <div><label class="dark:text-slate-300">Total Revenue (₹)</label><input type="number" id="g_revenue" value="100000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                        <div><label class="dark:text-slate-300">Total Employees (FTE)</label><input type="number" id="g_fte" value="500" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                        <div><label class="dark:text-slate-300">Total Working Hours (All Employees)</label><input type="number" id="g_hours" value="1040000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                        <div><label class="dark:text-slate-300">Total Revenue (₹)</label><input type="number"
+                                id="g_revenue" value="100000000" min="0" oninput="this.value = Math.abs(this.value)">
+                        </div>
+                        <div><label class="dark:text-slate-300">Total Employees (FTE)</label><input type="number"
+                                id="g_fte" value="500" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                        <div><label class="dark:text-slate-300">Total Working Hours (All Employees)</label><input
+                                type="number" id="g_hours" value="1040000" min="0"
+                                oninput="this.value = Math.abs(this.value)"></div>
                     </div>
-                    
-                    <button onclick="calculateAll()" class="mt-8 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Save Globals & Calculate</button>
+
+                    <button onclick="calculateAll()"
+                        class="mt-8 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Save
+                        Globals & Calculate</button>
                 </div>
             </section>
 
             <!-- 1. GHG FOOTPRINT -->
             <section id="tab-1" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Green House Gas (GHG) Footprint</h2>
-                
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 mb-6">
+
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700 mb-6">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <div class="flex justify-between items-center mb-4 border-b dark:border-slate-700 pb-2">
-                                <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">Emission Sources</h3>
-                                <button onclick="addGHGRow()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded text-sm transition"><i class="fa-solid fa-plus mr-1"></i> Add Source</button>
+                                <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">Emission Sources
+                                </h3>
+                                <button onclick="addGHGRow()"
+                                    class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded text-sm transition"><i
+                                        class="fa-solid fa-plus mr-1"></i> Add Source</button>
                             </div>
                             <div id="ghg-container" class="space-y-4 max-h-[28rem] overflow-y-auto pr-2"></div>
-                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Calculate</button>
+                            <button onclick="calculateAll()"
+                                class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Calculate</button>
                         </div>
-                        
+
                         <div class="flex flex-col gap-6">
-                            <div class="p-5 bg-blue-50/50 dark:bg-slate-900 rounded-lg border border-blue-200 dark:border-slate-700 shadow-inner">
+                            <div
+                                class="p-5 bg-blue-50/50 dark:bg-slate-900 rounded-lg border border-blue-200 dark:border-slate-700 shadow-inner">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Total Footprint</p>
-                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span id="res_ghg_total" class="font-mono font-bold">0.00</span> <span class="text-lg">tCO₂e</span></p>
+                                        <p
+                                            class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">
+                                            Total Footprint</p>
+                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span
+                                                id="res_ghg_total" class="font-mono font-bold">0.00</span> <span
+                                                class="text-lg">tCO₂e</span></p>
                                     </div>
                                     <div>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">GHG Intensity</p>
-                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span id="res_ghg_intensity" class="font-mono font-bold">0.00</span> <span class="text-lg">/ ₹</span></p>
+                                        <p
+                                            class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">
+                                            GHG Intensity</p>
+                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span
+                                                id="res_ghg_intensity" class="font-mono font-bold">0.00</span> <span
+                                                class="text-lg">/ ₹</span></p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                            <div
+                                class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
                                 <canvas id="localChart_1"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+
+                <div
+                    class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
                     <strong>Resources:</strong> IPCC EFDB, US EPA GHG Hub, UK DEFRA, India GHG Program.
                 </div>
             </section>
@@ -255,65 +400,97 @@
             <!-- 2. WATER FOOTPRINT -->
             <section id="tab-2" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Water Footprint</h2>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
-                            <div class="mb-6 p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 flex items-center justify-between">
+                            <div
+                                class="mb-6 p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 flex items-center justify-between">
                                 <div>
-                                    <h4 class="font-bold text-slate-700 dark:text-slate-200">Estimation Method (CGWA)</h4>
-                                    <p class="text-sm text-slate-500 dark:text-slate-400">Calculate office consumption based on 45L/head/day.</p>
+                                    <h4 class="font-bold text-slate-700 dark:text-slate-200">Estimation Method (CGWA)
+                                    </h4>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400">Calculate office consumption
+                                        based on 45L/head/day.</p>
                                 </div>
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="water_use_est" onchange="toggleWaterMode()" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-gray-300 dark:bg-slate-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    <input type="checkbox" id="water_use_est" onchange="toggleWaterMode()"
+                                        class="sr-only peer">
+                                    <div
+                                        class="w-11 h-6 bg-gray-300 dark:bg-slate-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                    </div>
                                 </label>
                             </div>
 
                             <div id="water-direct-mode" class="space-y-6">
                                 <div>
-                                    <div class="flex justify-between items-center mb-2 border-b dark:border-slate-700 pb-1">
-                                        <h3 class="font-semibold text-blue-800 dark:text-blue-400"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Withdrawal</h3>
-                                        <button onclick="addWaterRow('withdrawal')" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 text-sm"><i class="fa-solid fa-plus"></i> Add</button>
+                                    <div
+                                        class="flex justify-between items-center mb-2 border-b dark:border-slate-700 pb-1">
+                                        <h3 class="font-semibold text-blue-800 dark:text-blue-400"><i
+                                                class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Withdrawal</h3>
+                                        <button onclick="addWaterRow('withdrawal')"
+                                            class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 text-sm"><i
+                                                class="fa-solid fa-plus"></i> Add</button>
                                     </div>
                                     <div id="water-withdrawal-container" class="space-y-2"></div>
                                 </div>
                                 <div>
-                                    <div class="flex justify-between items-center mb-2 border-b dark:border-slate-700 pb-1">
-                                        <h3 class="font-semibold text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Discharge</h3>
-                                        <button onclick="addWaterRow('discharge')" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 text-sm"><i class="fa-solid fa-plus"></i> Add</button>
+                                    <div
+                                        class="flex justify-between items-center mb-2 border-b dark:border-slate-700 pb-1">
+                                        <h3 class="font-semibold text-emerald-600 dark:text-emerald-400"><i
+                                                class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Discharge</h3>
+                                        <button onclick="addWaterRow('discharge')"
+                                            class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 text-sm"><i
+                                                class="fa-solid fa-plus"></i> Add</button>
                                     </div>
                                     <div id="water-discharge-container" class="space-y-2"></div>
                                 </div>
                             </div>
 
-                            <div id="water-est-mode" style="display: none;" class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-blue-50 dark:bg-slate-900 p-4 rounded-lg border border-blue-100 dark:border-slate-700">
-                                <div><label class="dark:text-slate-300">Employees</label><input type="number" id="wat_est_emp" value="500" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Working Days</label><input type="number" id="wat_est_days" value="250" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            <div id="water-est-mode" style="display: none;"
+                                class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-blue-50 dark:bg-slate-900 p-4 rounded-lg border border-blue-100 dark:border-slate-700">
+                                <div><label class="dark:text-slate-300">Employees</label><input type="number"
+                                        id="wat_est_emp" value="500" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Working Days</label><input type="number"
+                                        id="wat_est_days" value="250" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
                             </div>
-                            
-                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Calculate</button>
+
+                            <button onclick="calculateAll()"
+                                class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Calculate</button>
                         </div>
-                        
+
                         <div class="flex flex-col gap-6">
-                            <div class="p-5 bg-blue-50/50 dark:bg-slate-900 rounded-lg border border-blue-200 dark:border-slate-700 shadow-inner">
+                            <div
+                                class="p-5 bg-blue-50/50 dark:bg-slate-900 rounded-lg border border-blue-200 dark:border-slate-700 shadow-inner">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Net Consumed</p>
-                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span id="res_wat_consumed" class="font-mono font-bold">0.00</span> <span class="text-lg">kL</span></p>
+                                        <p
+                                            class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">
+                                            Net Consumed</p>
+                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span
+                                                id="res_wat_consumed" class="font-mono font-bold">0.00</span> <span
+                                                class="text-lg">kL</span></p>
                                     </div>
                                     <div>
-                                        <p class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">Water Intensity</p>
-                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span id="res_wat_intensity" class="font-mono font-bold">0.00</span> <span class="text-lg">/ ₹</span></p>
+                                        <p
+                                            class="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider">
+                                            Water Intensity</p>
+                                        <p class="text-3xl font-light text-blue-600 dark:text-blue-400"><span
+                                                id="res_wat_intensity" class="font-mono font-bold">0.00</span> <span
+                                                class="text-lg">/ ₹</span></p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                            <div
+                                class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
                                 <canvas id="localChart_2"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                <div
+                    class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
                     <strong>Resources:</strong> Central Ground Water Authority (CGWA) Guidelines.
                 </div>
             </section>
@@ -321,22 +498,36 @@
             <!-- 3. Energy -->
             <section id="tab-3" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Energy Footprint</h2>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
-                                <div><label class="dark:text-slate-300">Renewable Sources (GJ)</label><input type="number" id="nrg_ren" value="2000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Non-Renewable Sources (GJ)</label><input type="number" id="nrg_non" value="8000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Renewable Sources (GJ)</label><input
+                                        type="number" id="nrg_ren" value="2000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Non-Renewable Sources (GJ)</label><input
+                                        type="number" id="nrg_non" value="8000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
                             </div>
-                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                            <button onclick="calculateAll()"
+                                class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                         </div>
                         <div class="flex flex-col gap-6">
-                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
-                                <p class="dark:text-slate-300 mb-2">Total Energy: <span id="res_nrg_total" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> GJ</p>
-                                <p class="dark:text-slate-300 mb-2">% Renewable: <span id="res_nrg_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
-                                <p class="dark:text-slate-300">Energy Intensity: <span id="res_nrg_intensity" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> / ₹</p>
+                            <div
+                                class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">Total Energy: <span id="res_nrg_total"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> GJ
+                                </p>
+                                <p class="dark:text-slate-300 mb-2">% Renewable: <span id="res_nrg_perc"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %
+                                </p>
+                                <p class="dark:text-slate-300">Energy Intensity: <span id="res_nrg_intensity"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> /
+                                    ₹</p>
                             </div>
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                            <div
+                                class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
                                 <canvas id="localChart_3"></canvas>
                             </div>
                         </div>
@@ -347,22 +538,36 @@
             <!-- 4. Waste -->
             <section id="tab-4" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Waste Management</h2>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
-                                <div><label class="dark:text-slate-300">Total Waste Generated (MT)</label><input type="number" id="wst_gen" value="150" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Waste Recycled/Reused (MT)</label><input type="number" id="wst_rec" value="90" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Waste Sent to Disposal (MT)</label><input type="number" id="wst_disp" value="60" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Waste Generated (MT)</label><input
+                                        type="number" id="wst_gen" value="150" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Waste Recycled/Reused (MT)</label><input
+                                        type="number" id="wst_rec" value="90" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Waste Sent to Disposal (MT)</label><input
+                                        type="number" id="wst_disp" value="60" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
                             </div>
-                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                            <button onclick="calculateAll()"
+                                class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                         </div>
                         <div class="flex flex-col gap-6">
-                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
-                                <p class="dark:text-slate-300 mb-2">Waste Intensity: <span id="res_wst_intensity" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> / ₹</p>
-                                <p class="dark:text-slate-300">% Recycled: <span id="res_wst_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                            <div
+                                class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">Waste Intensity: <span id="res_wst_intensity"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> /
+                                    ₹</p>
+                                <p class="dark:text-slate-300">% Recycled: <span id="res_wst_perc"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %
+                                </p>
                             </div>
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                            <div
+                                class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
                                 <canvas id="localChart_4"></canvas>
                             </div>
                         </div>
@@ -373,22 +578,36 @@
             <!-- 5. Safety -->
             <section id="tab-5" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Employee Well-being and Safety</h2>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
-                                <div><label class="dark:text-slate-300">Well-being Spending (₹)</label><input type="number" id="saf_spend" value="1500000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Total Benefits Expense (₹)</label><input type="number" id="saf_totalben" value="25000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Lost Time Injuries (LTI)</label><input type="number" id="saf_lti" value="2" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Well-being Spending (₹)</label><input
+                                        type="number" id="saf_spend" value="1500000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Benefits Expense (₹)</label><input
+                                        type="number" id="saf_totalben" value="25000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Lost Time Injuries (LTI)</label><input
+                                        type="number" id="saf_lti" value="2" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
                             </div>
-                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                            <button onclick="calculateAll()"
+                                class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                         </div>
                         <div class="flex flex-col gap-6">
-                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
-                                <p class="dark:text-slate-300 mb-2">Well-being Spend %: <span id="res_saf_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
-                                <p class="dark:text-slate-300">LTIFR (Per 1M Hrs): <span id="res_saf_ltifr" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span></p>
+                            <div
+                                class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">Well-being Spend %: <span id="res_saf_perc"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %
+                                </p>
+                                <p class="dark:text-slate-300">LTIFR (Per 1M Hrs): <span id="res_saf_ltifr"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span>
+                                </p>
                             </div>
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                            <div
+                                class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
                                 <canvas id="localChart_5"></canvas>
                             </div>
                         </div>
@@ -399,27 +618,40 @@
             <!-- 6. Gender Diversity -->
             <section id="tab-6" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Gender Diversity in Business</h2>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
-                                <div><label class="dark:text-slate-300">Wages to Females (₹)</label><input type="number" id="div_wage_f" value="8000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Total Wages (₹)</label><input type="number" id="div_wage_t" value="25000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Total POSH Complaints Filed</label><input type="number" id="div_posh_filed" value="3" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Wages to Females (₹)</label><input type="number"
+                                        id="div_wage_f" value="8000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Wages (₹)</label><input type="number"
+                                        id="div_wage_t" value="25000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total POSH Complaints Filed</label><input
+                                        type="number" id="div_posh_filed" value="3" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
                             </div>
-                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                            <button onclick="calculateAll()"
+                                class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                         </div>
                         <div class="flex flex-col gap-6">
-                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
-                                <p class="dark:text-slate-300">Female Wage Share: <span id="res_div_wage_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                            <div
+                                class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300">Female Wage Share: <span id="res_div_wage_perc"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %
+                                </p>
                             </div>
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                            <div
+                                class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
                                 <canvas id="localChart_6"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                <div
+                    class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
                     <strong>Resources:</strong> Prevention of Sexual Harassment (POSH) Act, 2013.
                 </div>
             </section>
@@ -427,29 +659,46 @@
             <!-- 7. Inclusive -->
             <section id="tab-7" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Inclusive Development</h2>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
-                                <div><label class="dark:text-slate-300">MSME Purchases (₹)</label><input type="number" id="inc_msme" value="12000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Total Purchases (₹)</label><input type="number" id="inc_totalpur" value="40000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Small Town Wages (₹)</label><input type="number" id="inc_town_wages" value="5000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Total Wages (₹)</label><input type="number" id="inc_total_wages" value="25000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">MSME Purchases (₹)</label><input type="number"
+                                        id="inc_msme" value="12000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Purchases (₹)</label><input type="number"
+                                        id="inc_totalpur" value="40000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Small Town Wages (₹)</label><input type="number"
+                                        id="inc_town_wages" value="5000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Wages (₹)</label><input type="number"
+                                        id="inc_total_wages" value="25000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
                             </div>
-                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                            <button onclick="calculateAll()"
+                                class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                         </div>
                         <div class="flex flex-col gap-6">
-                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
-                                <p class="dark:text-slate-300 mb-2">MSME Share: <span id="res_inc_msme_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
-                                <p class="dark:text-slate-300">Small Town Wages: <span id="res_inc_town_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                            <div
+                                class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">MSME Share: <span id="res_inc_msme_perc"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %
+                                </p>
+                                <p class="dark:text-slate-300">Small Town Wages: <span id="res_inc_town_perc"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %
+                                </p>
                             </div>
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                            <div
+                                class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
                                 <canvas id="localChart_7"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                <div
+                    class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
                     <strong>Resources:</strong> MSMED Act 2006, RBI Population Classification.
                 </div>
             </section>
@@ -457,29 +706,47 @@
             <!-- 8. Fairness -->
             <section id="tab-8" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Fairness in Engagement</h2>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
-                                <div><label class="dark:text-slate-300">Customer Data Breaches</label><input type="number" id="fair_cust_breach" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Total Data Breaches</label><input type="number" id="fair_tot_breach" value="1" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Average Accounts Payable (₹)</label><input type="number" id="fair_ap" value="4500000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Total COGS (₹)</label><input type="number" id="fair_cogs" value="30000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Customer Data Breaches</label><input
+                                        type="number" id="fair_cust_breach" value="0" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Data Breaches</label><input type="number"
+                                        id="fair_tot_breach" value="1" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Average Accounts Payable (₹)</label><input
+                                        type="number" id="fair_ap" value="4500000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total COGS (₹)</label><input type="number"
+                                        id="fair_cogs" value="30000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
                             </div>
-                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                            <button onclick="calculateAll()"
+                                class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                         </div>
                         <div class="flex flex-col gap-6">
-                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
-                                <p class="dark:text-slate-300 mb-2">Customer Breach Share: <span id="res_fair_breach_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
-                                <p class="dark:text-slate-300">Days Payable Outstanding: <span id="res_fair_dpo" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> Days</p>
+                            <div
+                                class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">Customer Breach Share: <span
+                                        id="res_fair_breach_perc"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %
+                                </p>
+                                <p class="dark:text-slate-300">Days Payable Outstanding: <span id="res_fair_dpo"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span>
+                                    Days</p>
                             </div>
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                            <div
+                                class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
                                 <canvas id="localChart_8"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                <div
+                    class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
                     <strong>Resources:</strong> SPDI Rules 2011, CERT-In.
                 </div>
             </section>
@@ -487,29 +754,46 @@
             <!-- 9. Openness -->
             <section id="tab-9" class="tab-content">
                 <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Openness of Business</h2>
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-md border border-blue-100 dark:border-slate-700">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
-                                <div><label class="dark:text-slate-300">Top 10 Dealer Sales (₹)</label><input type="number" id="open_top10" value="20000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Total Dealer Sales (₹)</label><input type="number" id="open_totalsales" value="60000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Related Party Trans. (₹)</label><input type="number" id="open_rp" value="3000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                <div><label class="dark:text-slate-300">Total Category Trans. (₹)</label><input type="number" id="open_totcat" value="100000000" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Top 10 Dealer Sales (₹)</label><input
+                                        type="number" id="open_top10" value="20000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Dealer Sales (₹)</label><input
+                                        type="number" id="open_totalsales" value="60000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Related Party Trans. (₹)</label><input
+                                        type="number" id="open_rp" value="3000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
+                                <div><label class="dark:text-slate-300">Total Category Trans. (₹)</label><input
+                                        type="number" id="open_totcat" value="100000000" min="0"
+                                        oninput="this.value = Math.abs(this.value)"></div>
                             </div>
-                            <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
+                            <button onclick="calculateAll()"
+                                class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                         </div>
                         <div class="flex flex-col gap-6">
-                            <div class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
-                                <p class="dark:text-slate-300 mb-2">Top 10 Concentration: <span id="res_open_con_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
-                                <p class="dark:text-slate-300">Related Party Trans.: <span id="res_open_rp_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p>
+                            <div
+                                class="p-4 bg-blue-50/50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
+                                <p class="dark:text-slate-300 mb-2">Top 10 Concentration: <span id="res_open_con_perc"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %
+                                </p>
+                                <p class="dark:text-slate-300">Related Party Trans.: <span id="res_open_rp_perc"
+                                        class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %
+                                </p>
                             </div>
-                            <div class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
+                            <div
+                                class="flex-1 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 p-4 relative min-h-[300px]">
                                 <canvas id="localChart_9"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
+                <div
+                    class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3">
                     <strong>Resources:</strong> SEBI LODR Regulations.
                 </div>
             </section>
@@ -535,7 +819,7 @@
         }
 
         const ghgFactors = {
-            "elec": { label: "Grid Electricity (CEA Default)", value: 0.72, unit: "MWh", scale: 1 }, 
+            "elec": { label: "Grid Electricity (CEA Default)", value: 0.72, unit: "MWh", scale: 1 },
             "scooter": { label: "Scooter (<110 CC)", value: 0.0368, unit: "km", scale: 0.001 },
             "moto": { label: "Motorcycle (<200 CC)", value: 0.0458, unit: "km", scale: 0.001 },
             "car_p": { label: "Passenger Car (Petrol Avg)", value: 0.150, unit: "km", scale: 0.001 },
@@ -568,7 +852,7 @@
         function updateThemeIcon() {
             const isDark = document.documentElement.classList.contains('dark');
             const icon = document.getElementById('theme-icon');
-            if(isDark) {
+            if (isDark) {
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
             } else {
@@ -597,7 +881,7 @@
         }
 
         function toggleSidebarMobile() {
-            if(window.innerWidth <= 768) toggleSidebar();
+            if (window.innerWidth <= 768) toggleSidebar();
         }
 
         function openTab(tabId) {
@@ -605,7 +889,7 @@
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             document.getElementById('nav-' + tabId.replace('tab-', '')).classList.add('active');
-            
+
             trackEvent('tab_view', { 'tab_id': tabId });
 
             // Using setTimeout allows display:block to fully apply before calculating/rendering canvas
@@ -618,26 +902,26 @@
         // PDF Generation
         function downloadPDF() {
             trackEvent('download_pdf');
-            
+
             const element = document.getElementById('dashboard-export-area');
             const compName = document.getElementById('meta_name').value || 'Company_Report';
             const isDark = document.documentElement.classList.contains('dark');
-            
+
             // Force a fixed width/layout temporarily so flex boxes don't wrap and overlap during export
             const originalStyle = element.style.cssText;
             element.style.width = '1200px';
             element.style.maxWidth = '1200px';
             element.style.padding = '20px';
             element.style.background = isDark ? '#0f172a' : '#ffffff';
-            
+
             const opt = {
-                margin:       0.5,
-                filename:     `${compName.replace(/\s+/g, '_')}_BRSR_Core.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, windowWidth: 1200, logging: false },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+                margin: 0.5,
+                filename: `${compName.replace(/\s+/g, '_')}_BRSR_Core.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, windowWidth: 1200, logging: false },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
             };
-            
+
             setTimeout(() => {
                 html2pdf().set(opt).from(element).save().then(() => {
                     // Restore responsive layout
@@ -694,7 +978,7 @@
             const selectVal = row.querySelector('.ghg-select').value;
             const factorInput = row.querySelector('.ghg-factor');
             const data = ghgFactors[selectVal];
-            
+
             row.querySelector('.ghg-unit').innerText = data.unit;
             row.querySelector('.ghg-scale').value = data.scale;
 
@@ -719,7 +1003,7 @@
             waterRowCounts[type]++;
             const rowId = `wat-${type}-${waterRowCounts[type]}`;
             const optionsHtml = waterSources.map(s => `<option value="${s}">${s}</option>`).join('');
-            
+
             const rowHtml = `
                 <div id="${rowId}" class="wat-entry flex gap-2 items-center">
                     <select class="w-1/2 text-sm border rounded p-2 dark:border-slate-600 dark:bg-slate-800">${optionsHtml}</select>
@@ -737,9 +1021,9 @@
             const isDark = document.documentElement.classList.contains('dark');
             const gridColor = isDark ? '#334155' : '#e2e8f0';
             const ctx = document.getElementById(canvasId).getContext('2d');
-            
-            if(charts[chartKey]) charts[chartKey].destroy();
-            
+
+            if (charts[chartKey]) charts[chartKey].destroy();
+
             let options = {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -749,8 +1033,8 @@
 
             if (type === 'bar') {
                 options.scales = {
-                    y: { 
-                        beginAtZero: true, 
+                    y: {
+                        beginAtZero: true,
                         grid: { color: gridColor },
                         type: useLogScale ? 'logarithmic' : 'linear'
                     },
@@ -792,30 +1076,30 @@
                 let totalGHG = 0;
                 let ghgLabels = [], ghgData = [];
                 let hasValidData = false;
-                
+
                 document.querySelectorAll('.ghg-entry').forEach(row => {
                     const desc = row.querySelector('.ghg-desc').value || 'Unknown';
                     const factor = parseFloat(row.querySelector('.ghg-factor').value) || 0;
                     const activity = parseFloat(row.querySelector('.ghg-activity').value) || 0;
                     const scale = parseFloat(row.querySelector('.ghg-scale').value) || 1;
                     const rowTotal = factor * activity * scale;
-                    
+
                     row.querySelector('.ghg-row-total').innerText = rowTotal.toFixed(2);
                     row.querySelector('.ghg-row-total-display').innerText = rowTotal.toFixed(2);
                     totalGHG += rowTotal;
-                    
-                    if(rowTotal > 0) { 
-                        ghgLabels.push(desc); 
+
+                    if (rowTotal > 0) {
+                        ghgLabels.push(desc);
                         ghgData.push(rowTotal);
-                        hasValidData = true; 
+                        hasValidData = true;
                     }
                 });
-                
-                if(!hasValidData) { ghgLabels=['No Data']; ghgData=[0]; }
-                
+
+                if (!hasValidData) { ghgLabels = ['No Data']; ghgData = [0]; }
+
                 document.getElementById('res_ghg_total').innerText = totalGHG.toFixed(2);
                 document.getElementById('res_ghg_intensity').innerText = (totalGHG / rev).toFixed(8);
-                
+
                 // Enhanced contrasting color palette
                 const ghgColors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e'];
                 drawLocalChart('l1', 'localChart_1', 'bar', ghgLabels, ghgData, ghgColors, true);
@@ -903,7 +1187,7 @@
 
                 // Update Globals
                 updateGlobalCharts(
-                    (totalGHG / rev * 1000000).toFixed(2), 
+                    (totalGHG / rev * 1000000).toFixed(2),
                     (w_con / rev * 1000000).toFixed(2),
                     (e_tot / rev * 1000000).toFixed(2),
                     (wst_g / rev * 1000000).toFixed(2),
@@ -930,7 +1214,7 @@
                         borderRadius: 4
                     }]
                 },
-                options: { 
+                options: {
                     responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
                     animation: { duration: 800, easing: 'easeOutQuart' },
                     scales: { y: { grid: { color: gridColor } }, x: { grid: { color: gridColor } } }
@@ -951,10 +1235,10 @@
                         pointBackgroundColor: '#2563eb'
                     }]
                 },
-                options: { 
+                options: {
                     responsive: true, maintainAspectRatio: false,
                     animation: { duration: 800, easing: 'easeOutQuart' },
-                    scales: { r: { min: 0, max: 100, grid: { color: gridColor }, angleLines: { color: gridColor } } } 
+                    scales: { r: { min: 0, max: 100, grid: { color: gridColor }, angleLines: { color: gridColor } } }
                 }
             });
         }
@@ -962,11 +1246,12 @@
         // Boot
         window.onload = () => {
             initTheme();
-            addGHGRow(); 
+            addGHGRow();
             addWaterRow('withdrawal');
             addWaterRow('discharge');
             calculateAll();
         };
     </script>
 </body>
+
 </html>
