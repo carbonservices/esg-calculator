@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 2,
+  "project": {
+    "name": "Tata Steel FY 2025-26 BRSR Core Case Study",
+    "meta": {
+      "name": "Tata Steel Limited",
+      "cin": "L27100MH1907PLC000260",
+      "author": "Public-report desk review"
+    },
+    "framework": "brsr",
+    "currentFY": "2026",
+    "demo": false,
+    "ambitions": [],
+    "years": {
+      "2026": {
+        "inputs": {
+          "g_revenue": "1397202200000",
+          "g_fte": "",
+          "g_hours": "",
+          "water_use_est": false,
+          "nrg_ren": "1510000",
+          "nrg_non": "622300000",
+          "wst_gen": "18782249",
+          "wst_rec": "18842244",
+          "wst_disp": "21909",
+          "saf_spend": "2654684180",
+          "saf_lti": "",
+          "div_wage_f": "7",
+          "div_wage_t": "100",
+          "div_posh_filed": "33",
+          "inc_msme": "11",
+          "inc_totalpur": "100",
+          "inc_town_wages": "19.34",
+          "inc_total_wages": "100",
+          "fair_cust_breach": "",
+          "fair_tot_breach": "",
+          "fair_ap": "94",
+          "fair_cogs": "365",
+          "open_top10": "29",
+          "open_totalsales": "100",
+          "open_rp": "39",
+          "open_totcat": "100",
+          "wat_est_emp": "",
+          "wat_est_days": "",
+          "wat_est_rate": "",
+          "wat_est_source": ""
+        },
+        "ghgRows": [
+          {
+            "desc": "Scope 1 emissions, Tata Steel Standalone",
+            "source": "custom",
+            "activity": "64000000",
+            "factor": "1",
+            "factorSource": "Tata Steel BRSR FY2025-26, printed p.184 / PDF p.48; reported million tonnes CO2e converted to tonnes CO2e"
+          },
+          {
+            "desc": "Scope 2 location-based emissions, Tata Steel Standalone",
+            "source": "custom",
+            "activity": "5000000",
+            "factor": "1",
+            "factorSource": "Tata Steel BRSR FY2025-26, printed p.184 / PDF p.48; reported million tonnes CO2e converted to tonnes CO2e"
+          }
+        ],
+        "waterIn": [
+          { "source": "Surface Water", "amount": "66296000" },
+          { "source": "Ground Water", "amount": "10250000" },
+          { "source": "Third Party Water", "amount": "18539000" },
+          { "source": "Others", "amount": "15538000" }
+        ],
+        "waterOut": [
+          { "source": "Surface Water", "amount": "11337000" },
+          { "source": "Third Party Water", "amount": "231000" }
+        ],
+        "metrics": {
+          "ghg": 69000000,
+          "water": 99055000,
+          "energy": 0.24206088392298938,
+          "safety": 0.19
+        },
+        "caseStudy": {
+          "source": "BRSR_500470_03062026200558.pdf",
+          "boundary": "Tata Steel Standalone, FY 2025-26",
+          "assurance": "Price Waterhouse & Co Chartered Accountants LLP provided reasonable assurance over specified standalone BRSR Core indicators; see the report for the exact assured scope.",
+          "ratioEquivalentInputs": {
+            "div_wage_f/div_wage_t": "7/100 reproduces the reported 7% female wage share; underlying rupee amounts were not disclosed.",
+            "inc_msme/inc_totalpur": "11/100 reproduces the reported 11% MSME sourcing share; underlying rupee amounts were not disclosed.",
+            "inc_town_wages/inc_total_wages": "19.34/100 reproduces rural plus semi-urban wage share of 0.03% + 19.31%; underlying rupee amounts were not disclosed.",
+            "fair_ap/fair_cogs": "94/365 reproduces 94 days because the report discloses the result but not both monetary components.",
+            "open_top10/open_totalsales": "29/100 reproduces the reported top-ten dealer concentration; underlying sales amounts were not disclosed.",
+            "open_rp/open_totcat": "39/100 reproduces the reported related-party purchase share; the report separately gives sales, loans and advances, and investment shares."
+          },
+          "unavailableInputs": {
+            "g_hours/saf_lti": "The report gives employee and worker LTIFR but not the matching lost-time injury counts and hours needed by this calculator.",
+            "fair_cust_breach/fair_tot_breach": "Both counts are nil, so a percentage has no positive denominator and remains unavailable."
+          }
+        }
+      }
+    }
+  }
+}

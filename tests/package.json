@@ -1,0 +1,13 @@
+{
+  "name": "esg-calculator",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "check": "node --check build-site.js && node --check ../js/project-data.js && node --check ../js/pdf-export.js && node --check ../js/calculations.js && node --check ../js/gri-scoring.js && node --check ../js/gri-metrics.js && node --check ../js/gri-data.js && node --check ../js/gri.js",
+    "test": "npm run check && node --test *.test.js",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  }
+}

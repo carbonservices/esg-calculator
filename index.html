@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carbon ESG - BRSR Core Calculator & Reporting</title>
+    <title>Carbon ESG Calculator | BRSR Core &amp; GRI Reporting</title>
     
     <!-- SEO Favicon -->
     <link rel="icon" type="image/png" href="logo.png" sizes="48x48">
@@ -13,10 +13,38 @@
     <link rel="apple-touch-icon" href="logo.png">
 
     <!-- SEO Optimization -->
-    <meta name="description" content="Calculate SEBI BRSR Core metrics for your organization with multi-year reporting with data stored locally.">
+    <meta name="description" content="Free BRSR Core and GRI reporting workspace for ESG metrics, readiness checks, content indexes, dashboards, multi-year reporting and auditable JSON exports.">
+    <meta name="keywords" content="ESG calculator, BRSR calculator, BRSR Core, GRI reporting, GRI Content Index, sustainability reporting, ESG metrics, India ESG">
+    <meta name="author" content="Carbon ESG">
+    <meta name="theme-color" content="#2563eb">
     <meta name="robots" content="index, follow">
-    <meta property="og:title" content="Carbon ESG - BRSR Core Reporting">
+    <link rel="canonical" href="https://carbonservices.github.io/esg-calculator/">
+    <meta property="og:title" content="Carbon ESG Calculator | BRSR Core &amp; GRI Reporting">
+    <meta property="og:description" content="Calculate BRSR Core metrics, manage GRI disclosures and export auditable ESG reporting workspaces.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://carbonservices.github.io/esg-calculator/">
+    <meta property="og:image" content="https://carbonservices.github.io/esg-calculator/logo-lg.png">
+    <meta property="og:site_name" content="Carbon ESG">
+    <meta property="og:locale" content="en_IN">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Carbon ESG Calculator | BRSR Core &amp; GRI Reporting">
+    <meta name="twitter:description" content="A free workspace for BRSR Core calculations, GRI reporting, dashboards and portable ESG records.">
+    <meta name="twitter:image" content="https://carbonservices.github.io/esg-calculator/logo-lg.png">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Carbon ESG Calculator",
+            "url": "https://carbonservices.github.io/esg-calculator/",
+            "description": "BRSR Core calculation and GRI reporting workspace with dashboards, content indexes and JSON data portability.",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript and a modern web browser",
+            "isAccessibleForFree": true,
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+            "featureList": ["BRSR Core metric calculations", "GRI reporting readiness", "GRI Content Index", "Multi-year ESG reporting", "JSON import and export", "PDF dashboard export"]
+        }
+    </script>
 
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -35,13 +63,14 @@
         tailwind.config = { darkMode: 'class' }
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" integrity="sha384-vsrfeLOOY6KuIYKDlmVH5UiBmgIdB1oEf7p01YgWHuqmOHfZr374+odEv96n9tNC" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha384-Yv5O+t3uE3hunW8uyrbpPW3iw6/5/Y7HitWJBLgqfMoA36NogMmy+8wWZMpn3HWc" crossorigin="anonymous" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0" crossorigin="anonymous">
 
     <style>
         html { scroll-behavior: smooth; }
         body { overflow-x: hidden; padding-top: 48px; /* Offset for Top Navbar */ }
+        img { max-width: 100%; height: auto; }
 
         /* Hide Scrollbar for Top Tabs */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -74,6 +103,21 @@
             background-color: #0f172a; color: #94a3b8; border-color: #334155;
         }
 
+        .gri-tab select, .gri-tab input[type="date"], .gri-tab input[type="text"], .gri-tab input[type="number"], .gri-tab input[type="search"] {
+            box-sizing: border-box; width: 100%; min-height: 2.75rem; padding: 0.625rem 0.75rem;
+            border: 1px solid #cbd5e1; border-radius: 0.5rem; margin-top: 0.375rem;
+            background-color: #fff; color: #1e293b; font-size: 0.875rem; line-height: 1.25rem;
+        }
+        .gri-tab textarea { box-sizing: border-box; width: 100%; padding: 0.625rem 0.75rem; border-radius: 0.5rem; margin-top: 0.375rem; }
+        .gri-tab select:focus, .gri-tab input[type="date"]:focus, .gri-tab input[type="text"]:focus, .gri-tab input[type="number"]:focus, .gri-tab input[type="search"]:focus, .gri-tab textarea:focus {
+            border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); outline: none;
+        }
+        .gri-tab input[type="date"] { color-scheme: light; }
+        html.dark .gri-tab select, html.dark .gri-tab input[type="date"], html.dark .gri-tab input[type="text"], html.dark .gri-tab input[type="number"], html.dark .gri-tab input[type="search"], html.dark .gri-tab textarea {
+            background-color: #1e293b; border-color: #475569; color: #f8fafc;
+        }
+        html.dark .gri-tab input[type="date"] { color-scheme: dark; }
+
         /* Safe isolation for the workspace name input */
         input#project_name_inline:focus { background-color: #e2e8f0 !important; color: #0f172a !important; }
         html.dark input#project_name_inline:focus { background-color: #1e293b !important; color: #f8fafc !important; }
@@ -88,14 +132,6 @@
         .target-bar-marker { position: absolute; top: -4px; bottom: -4px; width: 2px; background-color: #0f172a; }
         html.dark .target-bar-marker { background-color: #f8fafc; }
 
-        /* Project Tab Nav Styling */
-        .project-tab {
-            padding: 0 1rem; height: 100%; display: flex; align-items: center; gap: 0.5rem;
-            border-right: 1px solid #334155; cursor: pointer; color: #94a3b8;
-            font-size: 0.875rem; transition: background 0.2s; max-width: 160px;
-        }
-        .project-tab.active { background: #1e293b; color: #fff; border-bottom: 2px solid #3b82f6; }
-        .project-tab:hover:not(.active) { background: #0f172a; }
     </style>
 </head>
 
@@ -151,6 +187,19 @@
         </div>
     </div>
 
+    <div id="analytics-info-modal" role="dialog" aria-modal="true" aria-labelledby="analytics-info-title" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-2xl w-full max-w-lg border border-slate-200 dark:border-slate-700">
+            <div class="flex justify-between items-start gap-4">
+                <div>
+                    <h3 id="analytics-info-title" class="text-xl font-bold mb-2 text-slate-800 dark:text-white">Analytics disclosure</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300">Analytics uses the organization name, reporting year and usage events to identify adoption and industry trends. Financial records, ESG values, evidence and results stay in your browser.</p>
+                </div>
+                <button type="button" aria-label="Close analytics information" onclick="closeAnalyticsInfo()" class="text-slate-500 hover:text-slate-900 dark:hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <button type="button" onclick="closeAnalyticsInfo()" class="mt-5 w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg">Understood</button>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <section id="landing-hero" class="w-full min-h-[50vh] flex flex-col justify-center px-6 md:px-12 lg:px-24 relative overflow-hidden bg-gradient-to-br from-blue-50 to-white dark:from-slate-900 dark:to-slate-800">
         <div class="z-10 max-w-7xl w-full mx-auto flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10 lg:gap-16 py-12">
@@ -159,10 +208,10 @@
             </div>
             <div class="flex-1 text-left">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-slate-900 dark:text-white tracking-tight leading-tight">
-                    Carbon ESG BRSR<br class="hidden md:block" /> Reporting Workspace
+                    Carbon ESG BRSR &amp; GRI<br class="hidden md:block" /> Reporting Workspace
                 </h1>
                 <p class="text-base md:text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-2xl">
-                    Calculate SEBI BRSR Core metrics for your organization with multi-year reporting with data stored locally.
+                    Calculate SEBI BRSR Core metrics and build a validated GRI Content Index with multi-year reporting and local data storage.
                 </p>
                 <button onclick="scrollToWorkspace()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-10 rounded transition shadow-md text-lg focus:outline-none">
                     Go to workspace
@@ -200,25 +249,40 @@
                         <button onclick="deleteCurrentFY()" class="bg-slate-100 dark:bg-slate-800 hover:bg-red-100 dark:hover:bg-red-900/30 border border-slate-200 dark:border-slate-700 rounded h-8 w-8 flex items-center justify-center text-slate-600 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 transition focus:outline-none" title="Delete Current Year"><i class="fa-solid fa-trash text-xs"></i></button>
                     </div>
                 </div>
+                <div class="mt-3 grid grid-cols-2 gap-2" role="group" aria-label="Reporting framework">
+                    <button type="button" id="framework-brsr" onclick="switchFramework('brsr')" class="framework-button rounded px-3 py-2 text-xs font-bold bg-blue-600 text-white">BRSR</button>
+                    <button type="button" id="framework-gri" onclick="switchFramework('gri')" class="framework-button rounded px-3 py-2 text-xs font-bold bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300">GRI</button>
+                </div>
+                <div class="mt-2 text-center text-[11px] text-slate-500 dark:text-slate-400"><i class="fa-solid fa-cloud-arrow-up mr-1"></i>Saved automatically in this browser</div>
             </div>
             
             <div class="overflow-y-auto flex-1 pb-4">
                 <ul class="flex-col">
-                    <li class="px-4 mt-4 mb-2"><span class="text-xs uppercase text-slate-400 font-bold">Overview</span></li>
-                    <li><button onclick="openTab('tab-dashboard'); toggleSidebarMobile();" id="nav-dashboard" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-chart-pie w-6 text-blue-500 dark:text-blue-400"></i> Dashboard</button></li>
-                    <li><button onclick="openTab('tab-ambitions'); toggleSidebarMobile();" id="nav-ambitions" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-bullseye w-6 text-orange-500 dark:text-orange-400"></i> Ambitions</button></li>
-                    <li><button onclick="openTab('tab-globals'); toggleSidebarMobile();" id="nav-globals" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-globe w-6 text-blue-500 dark:text-blue-400"></i> Global Variables</button></li>
+                    <li class="shared-nav-item px-4 mt-4 mb-2"><span class="text-xs uppercase text-slate-400 font-bold">Workspace</span></li>
+                    <li class="shared-nav-item"><button onclick="openTab('tab-company-profile'); toggleSidebarMobile();" id="nav-company-profile" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-building w-6 text-slate-500 dark:text-slate-400"></i> Company Profile</button></li>
+                    <li class="shared-nav-item"><button onclick="openTab('tab-ambitions'); toggleSidebarMobile();" id="nav-ambitions" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-bullseye w-6 text-orange-500 dark:text-orange-400"></i> Ambitions</button></li>
+                    <li class="brsr-nav-item px-4 mt-4 mb-2"><span class="text-xs uppercase text-slate-400 font-bold">Overview</span></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-dashboard'); toggleSidebarMobile();" id="nav-dashboard" class="nav-item active w-full text-left px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-chart-pie w-6 text-blue-500 dark:text-blue-400"></i> Dashboard</button></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-globals'); toggleSidebarMobile();" id="nav-globals" class="nav-item w-full text-left px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-database w-6 text-blue-500 dark:text-blue-400"></i> Operational Data</button></li>
 
-                    <li class="px-4 mt-6 mb-2"><span class="text-xs uppercase text-slate-400 font-bold">BRSR Core Principles</span></li>
-                    <li><button onclick="openTab('tab-ghg-footprint'); toggleSidebarMobile();" id="nav-ghg-footprint" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-cloud w-6"></i> GHG Footprint</button></li>
-                    <li><button onclick="openTab('tab-water-footprint'); toggleSidebarMobile();" id="nav-water-footprint" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-water w-6"></i> Water Footprint</button></li>
-                    <li><button onclick="openTab('tab-energy-footprint'); toggleSidebarMobile();" id="nav-energy-footprint" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-bolt w-6"></i> Energy Footprint</button></li>
-                    <li><button onclick="openTab('tab-waste-management'); toggleSidebarMobile();" id="nav-waste-management" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-trash w-6"></i> Waste Management</button></li>
-                    <li><button onclick="openTab('tab-safety-wellbeing'); toggleSidebarMobile();" id="nav-safety-wellbeing" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-hard-hat w-6"></i> Safety & Wellbeing</button></li>
-                    <li><button onclick="openTab('tab-gender-diversity'); toggleSidebarMobile();" id="nav-gender-diversity" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-venus-mars w-6"></i> Gender Diversity</button></li>
-                    <li><button onclick="openTab('tab-inclusive-dev'); toggleSidebarMobile();" id="nav-inclusive-dev" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-hands-holding-circle w-6"></i> Inclusive Development</button></li>
-                    <li><button onclick="openTab('tab-fairness'); toggleSidebarMobile();" id="nav-fairness" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-handshake w-6"></i> Fairness</button></li>
-                    <li><button onclick="openTab('tab-openness'); toggleSidebarMobile();" id="nav-openness" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-door-open w-6"></i> Openness</button></li>
+                    <li class="brsr-nav-item px-4 mt-6 mb-2"><span class="text-xs uppercase text-slate-400 font-bold">BRSR Core Principles</span></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-ghg-footprint'); toggleSidebarMobile();" id="nav-ghg-footprint" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-cloud w-6"></i> GHG Footprint</button></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-water-footprint'); toggleSidebarMobile();" id="nav-water-footprint" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-water w-6"></i> Water Footprint</button></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-energy-footprint'); toggleSidebarMobile();" id="nav-energy-footprint" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-bolt w-6"></i> Energy Footprint</button></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-waste-management'); toggleSidebarMobile();" id="nav-waste-management" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-trash w-6"></i> Waste Management</button></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-safety-wellbeing'); toggleSidebarMobile();" id="nav-safety-wellbeing" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-hard-hat w-6"></i> Safety & Wellbeing</button></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-gender-diversity'); toggleSidebarMobile();" id="nav-gender-diversity" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-venus-mars w-6"></i> Gender Diversity</button></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-inclusive-dev'); toggleSidebarMobile();" id="nav-inclusive-dev" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-hands-holding-circle w-6"></i> Inclusive Development</button></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-fairness'); toggleSidebarMobile();" id="nav-fairness" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-handshake w-6"></i> Fairness</button></li>
+                    <li class="brsr-nav-item"><button onclick="openTab('tab-openness'); toggleSidebarMobile();" id="nav-openness" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-door-open w-6"></i> Openness</button></li>
+                    <li class="gri-nav-item hidden px-4 mt-4 mb-2"><span class="text-xs uppercase text-slate-400 font-bold">Overview</span></li>
+                    <li class="gri-nav-item hidden"><button onclick="openTab('tab-gri-overview'); toggleSidebarMobile();" id="nav-gri-overview" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-gauge-high w-6"></i> Readiness</button></li>
+                    <li class="gri-nav-item hidden px-4 mt-6 mb-2"><span class="text-xs uppercase text-slate-400 font-bold">GRI Reporting</span></li>
+                    <li class="gri-nav-item hidden"><button onclick="openTab('tab-gri-metrics'); toggleSidebarMobile();" id="nav-gri-metrics" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-calculator w-6"></i> Metrics</button></li>
+                    <li class="gri-nav-item hidden"><button onclick="openTab('tab-gri-setup'); toggleSidebarMobile();" id="nav-gri-setup" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-sliders w-6"></i> Reporting Setup</button></li>
+                    <li class="gri-nav-item hidden"><button onclick="openTab('tab-gri-materiality'); toggleSidebarMobile();" id="nav-gri-materiality" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-bullseye w-6"></i> Material Topics</button></li>
+                    <li class="gri-nav-item hidden"><button onclick="openTab('tab-gri-disclosures'); toggleSidebarMobile();" id="nav-gri-disclosures" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-list-check w-6"></i> Disclosures</button></li>
+                    <li class="gri-nav-item hidden"><button onclick="openTab('tab-gri-index'); toggleSidebarMobile();" id="nav-gri-index" class="nav-item w-full text-left px-6 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition"><i class="fa-solid fa-table-list w-6"></i> Content Index</button></li>
                 </ul>
             </div>
 
@@ -236,22 +300,41 @@
             <div id="instruction-banner" class="bg-blue-600 text-white p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 rounded-lg shadow-md mb-6 transition-opacity">
                 <div class="flex-1">
                     <i class="fa-solid fa-circle-info mr-2"></i>
-                    <strong>Instructions:</strong> Navigate through the tabs on the left, input your raw company data, and click "Calculate" to automatically update your dashboards.
+                    <strong>Start here:</strong> Choose BRSR or GRI, enter reporting data, then follow each highlighted action before export.
                 </div>
                 <button aria-label="Close Instructions" onclick="document.getElementById('instruction-banner').style.display='none'" class="text-blue-100 hover:text-white focus:outline-none"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
 
+            <div id="calculation-alerts" class="hidden mb-6 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-200" role="alert"></div>
+            <div id="validation-summary" class="hidden mb-6 rounded-lg border p-4 text-sm" role="status" aria-live="polite"></div>
+
             <div class="flex-1 pb-12">
+                <section id="tab-company-profile" class="tab-content shared-tab">
+                    <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2">Company Profile</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">One organization profile is shared by BRSR calculations, GRI disclosures and exported reports.</p>
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 max-w-4xl">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div><div class="flex items-center gap-2"><label for="meta_name" class="dark:text-slate-300">Company Name</label><button type="button" aria-label="Why company name is used in analytics" onclick="openAnalyticsInfo()" class="h-5 w-5 rounded-full border border-slate-400 text-xs text-slate-500 hover:border-blue-500 hover:text-blue-600 dark:text-slate-400">i</button></div><input type="text" id="meta_name" class="std-input" placeholder="e.g. Acme Corp"></div>
+                            <div><label for="meta_cin" class="dark:text-slate-300">CIN / Registration No.</label><input type="text" id="meta_cin" class="std-input" placeholder="e.g. U12345MH2026PTC123456"></div>
+                            <div><label for="meta_author" class="dark:text-slate-300">Reporting Officer</label><input type="text" id="meta_author" class="std-input" placeholder="e.g. Jane Doe"></div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- DASHBOARD -->
                 <section id="tab-dashboard" class="tab-content active">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                         <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white drop-shadow-sm">Global Dashboard</h2>
-                        <button onclick="downloadPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center transition focus:outline-none">
-                            <i class="fa-solid fa-download mr-2"></i> Export PDF
-                        </button>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" onclick="runWorkspaceValidation()" class="border border-blue-600 bg-white text-blue-700 hover:bg-blue-50 dark:bg-slate-800 dark:text-blue-300 px-4 py-2 rounded-lg font-semibold"><i class="fa-solid fa-list-check mr-2"></i>Run Validation</button>
+                            <button onclick="downloadPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold shadow flex items-center transition focus:outline-none"><i class="fa-solid fa-file-pdf mr-2"></i>Export Dashboard PDF</button>
+                            <button type="button" onclick="downloadProjectJSON()" class="bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-lg font-semibold"><i class="fa-solid fa-file-export mr-2"></i>Export JSON</button>
+                            <label class="cursor-pointer bg-slate-200 hover:bg-slate-300 text-slate-800 dark:bg-slate-700 dark:text-white px-4 py-2 rounded-lg font-semibold"><i class="fa-solid fa-file-import mr-2"></i>Load JSON<input type="file" accept="application/json,.json" class="hidden" onchange="importProjectJSON(this.files[0]); this.value=''"></label>
+                        </div>
                     </div>
 
                     <div id="dashboard-export-area" class="p-2 -mx-2 rounded-xl transition-colors duration-300">
+                        <div data-pdf-only class="hidden mb-6"><h2 class="text-3xl font-extrabold text-slate-800">BRSR Core Dashboard</h2><p class="text-sm text-slate-500 mt-1">Calculated dashboard for the selected reporting year</p></div>
                         
                         <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-8 transition-colors duration-300">
                             <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">Company Profile</h3>
@@ -266,11 +349,11 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                             <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col items-center transition-colors duration-300">
                                 <h3 class="text-lg font-semibold mb-4 text-center text-slate-700 dark:text-slate-200">Intensity Metrics (per Revenue)</h3>
-                                <div class="relative w-full h-72 flex-1"><canvas id="intensityChart"></canvas></div>
+                                <div data-pdf-chart class="relative w-full h-72 flex-1"><canvas id="intensityChart"></canvas></div>
                             </div>
                             <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col items-center transition-colors duration-300">
                                 <h3 class="text-lg font-semibold mb-4 text-center text-slate-700 dark:text-slate-200">Key Performance Indicators (%)</h3>
-                                <div class="relative w-full h-72 flex-1"><canvas id="radarChart"></canvas></div>
+                                <div data-pdf-chart class="relative w-full h-72 flex-1"><canvas id="radarChart"></canvas></div>
                             </div>
                         </div>
 
@@ -278,14 +361,15 @@
                             <h3 class="text-xl font-bold text-slate-800 dark:text-white">Active Targets Performance</h3>
                         </div>
                         <div id="dashboard-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                            <div class="col-span-full text-center p-6 text-slate-500 border border-dashed rounded dark:border-slate-700">Define ambitions in the Ambitions tab to see tracking cards here.</div>
+                            <div class="col-span-full text-center p-6 text-slate-500 border border-dashed rounded dark:border-slate-700">Define ambitions to see tracking cards here.</div>
                         </div>
                     </div>
                 </section>
 
                 <!-- AMBITIONS TAB -->
-                <section id="tab-ambitions" class="tab-content">
-                    <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white mb-6">Our Ambitions</h2>
+                <section id="tab-ambitions" class="tab-content shared-tab">
+                    <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white mb-2">Our Ambitions</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Track BRSR and GRI indicators in one place. For GRI reporting, cite approved targets, actions and progress in the relevant material-topic management response.</p>
                     
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-8">
                         <h3 class="text-lg font-bold mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">Define New Ambition</h3>
@@ -293,10 +377,20 @@
                             <div>
                                 <label class="dark:text-slate-300 text-sm">Metric</label>
                                 <select id="amb-metric" class="text-sm w-full border rounded p-2 dark:border-slate-600 dark:bg-slate-800">
+                                    <optgroup label="BRSR indicators">
                                     <option value="ghg">Total GHG Emissions (tCO₂e)</option>
                                     <option value="water">Net Water Consumed (kL)</option>
                                     <option value="energy">Renewable Energy (%)</option>
                                     <option value="safety">Well-being Spend (%)</option>
+                                    </optgroup>
+                                    <optgroup label="GRI indicators">
+                                        <option value="griGrossEmissions">Gross Scope 1, 2 and 3 (tCO₂e)</option>
+                                        <option value="griNetEnergy">Net Energy Consumption (GJ)</option>
+                                        <option value="griWaterConsumption">Water Consumption (ML)</option>
+                                        <option value="griWasteDiversion">Waste Diversion Rate (%)</option>
+                                        <option value="griEmployeeInjuryRate">Employee Recordable Injury Rate</option>
+                                        <option value="griLocalProcurement">Local Procurement (%)</option>
+                                    </optgroup>
                                 </select>
                             </div>
                             <div>
@@ -334,24 +428,16 @@
 
                 <!-- GLOBAL VARIABLES -->
                 <section id="tab-globals" class="tab-content">
-                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Global Variables & Data</h2>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">BRSR Operational Data</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Shared denominators used by BRSR Core calculations.</p>
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 max-w-2xl">
-
-                        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">Company Metadata</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div><label for="meta_name" class="dark:text-slate-300">Company Name</label><input type="text" id="meta_name" class="std-input" placeholder="e.g. Acme Corp"></div>
-                            <div><label for="meta_cin" class="dark:text-slate-300">CIN / Registration No.</label><input type="text" id="meta_cin" class="std-input" placeholder="e.g. U12345MH2026PTC123456"></div>
-                            <div><label for="meta_author" class="dark:text-slate-300">Reporting Officer</label><input type="text" id="meta_author" class="std-input" placeholder="e.g. Jane Doe"></div>
-                        </div>
-
-                        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 mt-8 border-b border-slate-200 dark:border-slate-700 pb-2">Financial & Operational Metrics (<span class="display-fy"></span>)</h3>
+                        <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-4 border-b border-slate-200 dark:border-slate-700 pb-2">Financial &amp; Operational Metrics (<span class="display-fy"></span>)</h3>
                         <div class="grid grid-cols-1 gap-4">
-                            <div><label for="g_revenue" class="dark:text-slate-300">Total Revenue (₹)</label><input type="number" id="g_revenue" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                            <div><label for="g_fte" class="dark:text-slate-300">Total Employees (FTE)</label><input type="number" id="g_fte" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                            <div><label for="g_hours" class="dark:text-slate-300">Total Working Hours (All Employees)</label><input type="number" id="g_hours" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            <div><label for="g_revenue" class="dark:text-slate-300">Total Revenue (₹)</label><input type="number" id="g_revenue" value="0" min="0"></div>
+                            <div><label for="g_fte" class="dark:text-slate-300">Total Employees (FTE)</label><input type="number" id="g_fte" value="0" min="0"></div>
+                            <div><label for="g_hours" class="dark:text-slate-300">Total Working Hours (All Employees)</label><input type="number" id="g_hours" value="0" min="0"></div>
                         </div>
 
-                        <button onclick="calculateAll()" class="mt-8 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Save Globals & Calculate</button>
                     </div>
                 </section>
 
@@ -366,7 +452,6 @@
                                     <button onclick="addGHGRow()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1 rounded text-sm transition"><i class="fa-solid fa-plus mr-1"></i> Add Source</button>
                                 </div>
                                 <div id="ghg-container" class="space-y-4 max-h-[28rem] overflow-y-auto pr-2"></div>
-                                <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Calculate</button>
                             </div>
                             <div class="flex flex-col gap-6">
                                 <div class="p-5 bg-blue-50 dark:bg-slate-900 rounded-lg border border-blue-100 dark:border-slate-700 shadow-inner">
@@ -425,10 +510,11 @@
                                     </div>
                                 </div>
                                 <div id="water-est-mode" style="display: none;" class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-blue-50 dark:bg-slate-900 p-4 rounded-lg border border-blue-100 dark:border-slate-700">
-                                    <div><label for="wat_est_emp" class="dark:text-slate-300">Employees</label><input type="number" id="wat_est_emp" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="wat_est_days" class="dark:text-slate-300">Working Days</label><input type="number" id="wat_est_days" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                                    <div><label for="wat_est_emp" class="dark:text-slate-300">Employees</label><input type="number" id="wat_est_emp" value="0" min="0"></div>
+                                    <div><label for="wat_est_days" class="dark:text-slate-300">Working Days</label><input type="number" id="wat_est_days" value="0" min="0"></div>
+                                    <div><label for="wat_est_rate" class="dark:text-slate-300">Litres per Employee-Day</label><input type="number" id="wat_est_rate" value="" min="0" step="0.01"></div>
+                                    <div><label for="wat_est_source" class="dark:text-slate-300">Estimate Source and Version</label><input type="text" id="wat_est_source" class="std-input" value="" placeholder="Cited benchmark or approved method"></div>
                                 </div>
-                                <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition shadow">Calculate</button>
                             </div>
                             <div class="flex flex-col gap-6">
                                 <div class="p-5 bg-blue-50 dark:bg-slate-900 rounded-lg border border-blue-100 dark:border-slate-700 shadow-inner">
@@ -461,10 +547,9 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div>
                                 <div class="grid grid-cols-1 gap-4">
-                                    <div><label for="nrg_ren" class="dark:text-slate-300">Renewable Sources (GJ)</label><input type="number" id="nrg_ren" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="nrg_non" class="dark:text-slate-300">Non-Renewable Sources (GJ)</label><input type="number" id="nrg_non" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            <div><label for="nrg_ren" class="dark:text-slate-300">Renewable Sources (GJ)</label><input type="number" id="nrg_ren" value="0" min="0"></div>
+                            <div><label for="nrg_non" class="dark:text-slate-300">Non-Renewable Sources (GJ)</label><input type="number" id="nrg_non" value="0" min="0"></div>
                                 </div>
-                                <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                             </div>
                             <div class="flex flex-col gap-6">
                                 <div class="p-4 bg-blue-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
@@ -485,11 +570,10 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div>
                                 <div class="grid grid-cols-1 gap-4">
-                                    <div><label for="wst_gen" class="dark:text-slate-300">Total Waste Generated (MT)</label><input type="number" id="wst_gen" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="wst_rec" class="dark:text-slate-300">Waste Recycled/Reused (MT)</label><input type="number" id="wst_rec" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="wst_disp" class="dark:text-slate-300">Waste Sent to Disposal (MT)</label><input type="number" id="wst_disp" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            <div><label for="wst_gen" class="dark:text-slate-300">Total Waste Generated (MT)</label><input type="number" id="wst_gen" value="0" min="0"></div>
+                            <div><label for="wst_rec" class="dark:text-slate-300">Waste Recycled/Reused (MT)</label><input type="number" id="wst_rec" value="0" min="0"></div>
+                            <div><label for="wst_disp" class="dark:text-slate-300">Waste Sent to Disposal (MT)</label><input type="number" id="wst_disp" value="0" min="0"></div>
                                 </div>
-                                <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                             </div>
                             <div class="flex flex-col gap-6">
                                 <div class="p-4 bg-blue-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
@@ -509,11 +593,9 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div>
                                 <div class="grid grid-cols-1 gap-4">
-                                    <div><label for="saf_spend" class="dark:text-slate-300">Well-being Spending (₹)</label><input type="number" id="saf_spend" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="saf_totalben" class="dark:text-slate-300">Total Benefits Expense (₹)</label><input type="number" id="saf_totalben" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="saf_lti" class="dark:text-slate-300">Lost Time Injuries (LTI)</label><input type="number" id="saf_lti" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            <div><label for="saf_spend" class="dark:text-slate-300">Well-being Spending (₹)</label><input type="number" id="saf_spend" value="0" min="0"></div>
+                            <div><label for="saf_lti" class="dark:text-slate-300">Lost Time Injuries (LTI)</label><input type="number" id="saf_lti" value="0" min="0"></div>
                                 </div>
-                                <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                             </div>
                             <div class="flex flex-col gap-6">
                                 <div class="p-4 bg-blue-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
@@ -533,11 +615,10 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div>
                                 <div class="grid grid-cols-1 gap-4">
-                                    <div><label for="div_wage_f" class="dark:text-slate-300">Wages to Females (₹)</label><input type="number" id="div_wage_f" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="div_wage_t" class="dark:text-slate-300">Total Wages (₹)</label><input type="number" id="div_wage_t" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="div_posh_filed" class="dark:text-slate-300">Total POSH Complaints Filed</label><input type="number" id="div_posh_filed" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            <div><label for="div_wage_f" class="dark:text-slate-300">Wages to Females (₹)</label><input type="number" id="div_wage_f" value="0" min="0"></div>
+                            <div><label for="div_wage_t" class="dark:text-slate-300">Total Wages (₹)</label><input type="number" id="div_wage_t" value="0" min="0"></div>
+                            <div><label for="div_posh_filed" class="dark:text-slate-300">Total POSH Complaints Filed</label><input type="number" id="div_posh_filed" value="0" min="0"></div>
                                 </div>
-                                <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                             </div>
                             <div class="flex flex-col gap-6">
                                 <div class="p-4 bg-blue-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner"><p class="dark:text-slate-800 dark:text-slate-300 font-medium">Female Wage Share: <span id="res_div_wage_perc" class="font-mono font-bold text-blue-600 dark:text-blue-400 text-xl">0</span> %</p></div>
@@ -555,12 +636,11 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div>
                                 <div class="grid grid-cols-1 gap-4">
-                                    <div><label for="inc_msme" class="dark:text-slate-300">MSME Purchases (₹)</label><input type="number" id="inc_msme" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="inc_totalpur" class="dark:text-slate-300">Total Purchases (₹)</label><input type="number" id="inc_totalpur" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="inc_town_wages" class="dark:text-slate-300">Small Town Wages (₹)</label><input type="number" id="inc_town_wages" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="inc_total_wages" class="dark:text-slate-300">Total Wages (₹)</label><input type="number" id="inc_total_wages" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            <div><label for="inc_msme" class="dark:text-slate-300">MSME Purchases (₹)</label><input type="number" id="inc_msme" value="0" min="0"></div>
+                            <div><label for="inc_totalpur" class="dark:text-slate-300">Total Purchases (₹)</label><input type="number" id="inc_totalpur" value="0" min="0"></div>
+                            <div><label for="inc_town_wages" class="dark:text-slate-300">Small Town Wages (₹)</label><input type="number" id="inc_town_wages" value="0" min="0"></div>
+                            <div><label for="inc_total_wages" class="dark:text-slate-300">Total Wages (₹)</label><input type="number" id="inc_total_wages" value="0" min="0"></div>
                                 </div>
-                                <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                             </div>
                             <div class="flex flex-col gap-6">
                                 <div class="p-4 bg-blue-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
@@ -581,12 +661,11 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div>
                                 <div class="grid grid-cols-1 gap-4">
-                                    <div><label for="fair_cust_breach" class="dark:text-slate-300">Customer Data Breaches</label><input type="number" id="fair_cust_breach" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="fair_tot_breach" class="dark:text-slate-300">Total Data Breaches</label><input type="number" id="fair_tot_breach" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="fair_ap" class="dark:text-slate-300">Average Accounts Payable (₹)</label><input type="number" id="fair_ap" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="fair_cogs" class="dark:text-slate-300">Total COGS (₹)</label><input type="number" id="fair_cogs" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            <div><label for="fair_cust_breach" class="dark:text-slate-300">Customer Data Breaches</label><input type="number" id="fair_cust_breach" value="0" min="0"></div>
+                            <div><label for="fair_tot_breach" class="dark:text-slate-300">Total Data Breaches</label><input type="number" id="fair_tot_breach" value="0" min="0"></div>
+                            <div><label for="fair_ap" class="dark:text-slate-300">Average Accounts Payable (₹)</label><input type="number" id="fair_ap" value="0" min="0"></div>
+                            <div><label for="fair_cogs" class="dark:text-slate-300">Total COGS (₹)</label><input type="number" id="fair_cogs" value="0" min="0"></div>
                                 </div>
-                                <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                             </div>
                             <div class="flex flex-col gap-6">
                                 <div class="p-4 bg-blue-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
@@ -607,12 +686,11 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             <div>
                                 <div class="grid grid-cols-1 gap-4">
-                                    <div><label for="open_top10" class="dark:text-slate-300">Top 10 Dealer Sales (₹)</label><input type="number" id="open_top10" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="open_totalsales" class="dark:text-slate-300">Total Dealer Sales (₹)</label><input type="number" id="open_totalsales" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="open_rp" class="dark:text-slate-300">Related Party Trans. (₹)</label><input type="number" id="open_rp" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
-                                    <div><label for="open_totcat" class="dark:text-slate-300">Total Category Trans. (₹)</label><input type="number" id="open_totcat" value="0" min="0" oninput="this.value = Math.abs(this.value)"></div>
+                            <div><label for="open_top10" class="dark:text-slate-300">Top 10 Dealer Sales (₹)</label><input type="number" id="open_top10" value="0" min="0"></div>
+                            <div><label for="open_totalsales" class="dark:text-slate-300">Total Dealer Sales (₹)</label><input type="number" id="open_totalsales" value="0" min="0"></div>
+                            <div><label for="open_rp" class="dark:text-slate-300">Related Party Trans. (₹)</label><input type="number" id="open_rp" value="0" min="0"></div>
+                            <div><label for="open_totcat" class="dark:text-slate-300">Total Category Trans. (₹)</label><input type="number" id="open_totcat" value="0" min="0"></div>
                                 </div>
-                                <button onclick="calculateAll()" class="mt-6 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">Calculate</button>
                             </div>
                             <div class="flex flex-col gap-6">
                                 <div class="p-4 bg-blue-50 dark:bg-slate-900 rounded-lg border dark:border-slate-700 shadow-inner">
@@ -625,11 +703,26 @@
                     </div>
                     <div class="text-xs text-slate-500 dark:text-slate-400 mt-4 border-t border-slate-200 dark:border-slate-700 pt-3"><strong>Resources:</strong> SEBI LODR Regulations.</div>
                 </section>
+
+                <section id="tab-gri-overview" class="tab-content gri-tab"><div id="gri-overview-root"></div></section>
+                <section id="tab-gri-metrics" class="tab-content gri-tab"><div id="gri-metrics-root"></div></section>
+                <section id="tab-gri-setup" class="tab-content gri-tab"><div id="gri-setup-root"></div></section>
+                <section id="tab-gri-materiality" class="tab-content gri-tab"><div id="gri-materiality-root"></div></section>
+                <section id="tab-gri-disclosures" class="tab-content gri-tab"><div id="gri-disclosures-root"></div></section>
+                <section id="tab-gri-index" class="tab-content gri-tab"><div id="gri-index-root"></div></section>
                 
             </div>
 
         </main>
     </div>
+
+    <script src="js/project-data.js"></script>
+    <script src="js/pdf-export.js"></script>
+    <script src="js/calculations.js"></script>
+    <script src="js/gri-scoring.js"></script>
+    <script src="js/gri-metrics.js"></script>
+    <script src="js/gri-data.js"></script>
+    <script src="js/gri.js"></script>
 
     <!-- App Logic -->
     <script>
@@ -638,26 +731,28 @@
         // Global Variables
         let tabStartTime = Date.now();
         let currentTab = 'tab-dashboard';
-        const STORAGE_KEY = 'carbon_esg_state_v1'; 
+        const STORAGE_KEY = 'carbon_esg_state_v2';
+        const LEGACY_STORAGE_KEY = 'carbon_esg_state_v1';
 
         // Hash-based State Manager
         let appData = {
+            schemaVersion: 2,
             activeHash: null,
             projects: {}
         };
 
         const ghgFactors = {
-            "elec": { label: "Grid Electricity (CEA Default)", value: 0.72, unit: "MWh", scale: 1 },
-            "scooter": { label: "Scooter (<110 CC)", value: 0.0368, unit: "km", scale: 0.001 },
-            "moto": { label: "Motorcycle (<200 CC)", value: 0.0458, unit: "km", scale: 0.001 },
-            "car_p": { label: "Passenger Car (Petrol Avg)", value: 0.150, unit: "km", scale: 0.001 },
-            "car_d": { label: "Passenger Car (Diesel Avg)", value: 0.160, unit: "km", scale: 0.001 },
-            "bus": { label: "Bus (Intracity)", value: 0.015161, unit: "pax-km", scale: 0.001 },
-            "freight_l": { label: "Freight (LDV <3.5T)", value: 0.3070, unit: "km", scale: 0.001 },
-            "freight_h": { label: "Freight (HDV >12T)", value: 0.7375, unit: "km", scale: 0.001 },
-            "rail_p": { label: "Rail (Passenger Avg)", value: 0.0079, unit: "pax-km", scale: 0.001 },
-            "rail_f": { label: "Rail (Freight)", value: 0.00996, unit: "ton-km", scale: 0.001 },
-            "custom": { label: "Custom Factor (Direct tCO₂e)", value: 1, unit: "units", scale: 1 }
+            "elec": { label: "Grid Electricity (CEA Default)", value: 0.72, unit: "MWh", scale: 1, citation: "CEA default; verify reporting-year factor before use" },
+            "scooter": { label: "Scooter (<110 CC)", value: 0.0368, unit: "km", scale: 0.001, citation: "Transport factor; verify geography and reporting year" },
+            "moto": { label: "Motorcycle (<200 CC)", value: 0.0458, unit: "km", scale: 0.001, citation: "Transport factor; verify geography and reporting year" },
+            "car_p": { label: "Passenger Car (Petrol Avg)", value: 0.150, unit: "km", scale: 0.001, citation: "Transport factor; verify vehicle class and reporting year" },
+            "car_d": { label: "Passenger Car (Diesel Avg)", value: 0.160, unit: "km", scale: 0.001, citation: "Transport factor; verify vehicle class and reporting year" },
+            "bus": { label: "Bus (Intracity)", value: 0.015161, unit: "pax-km", scale: 0.001, citation: "Transport factor; verify occupancy and reporting year" },
+            "freight_l": { label: "Freight (LDV <3.5T)", value: 0.3070, unit: "km", scale: 0.001, citation: "Transport factor; verify load basis and reporting year" },
+            "freight_h": { label: "Freight (HDV >12T)", value: 0.7375, unit: "km", scale: 0.001, citation: "Transport factor; verify load basis and reporting year" },
+            "rail_p": { label: "Rail (Passenger Avg)", value: 0.0079, unit: "pax-km", scale: 0.001, citation: "Transport factor; verify geography and reporting year" },
+            "rail_f": { label: "Rail (Freight)", value: 0.00996, unit: "ton-km", scale: 0.001, citation: "Transport factor; verify geography and reporting year" },
+            "custom": { label: "Custom Factor (Direct tCO₂e)", value: 1, unit: "units", scale: 1, citation: "User-supplied factor; retain source, version, and units in the description" }
         };
 
         const waterSources = ["Surface Water", "Ground Water", "Third Party Water", "Sea Water", "Others"];
@@ -665,18 +760,39 @@
         let ghgRowCount = 0;
         let waterRowCounts = { withdrawal: 0, discharge: 0 };
         let charts = { globalBar: null, globalRadar: null, l1: null, l2: null, l3: null, l4: null, l5: null, l6: null, l7: null, l8: null, l9: null };
+        let calculationAnalyticsTimer;
+        let visualRefreshTimer;
 
         // Analytics Wrapper
         function trackEvent(action, params = {}) {
             if (typeof gtag === 'function') {
                 const compName = document.getElementById('meta_name') ? document.getElementById('meta_name').value : 'Unknown';
-                const fy = (appData.activeHash && appData.projects[appData.activeHash]) ? appData.projects[appData.activeHash].currentFY : 'Unknown';
+                const project = appData.activeHash ? appData.projects[appData.activeHash] : null;
+                const fy = project ? project.currentFY : 'Unknown';
+                const framework = project && project.framework === 'gri' ? 'gri' : 'brsr';
+                const allowed = new Set(['section_id', 'time_seconds', 'tab_id', 'year', 'field_id', 'framework', 'type']);
+                const safeParams = Object.fromEntries(Object.entries(params).filter(([key]) => allowed.has(key)));
                 gtag('event', action, {
                     'company_name': compName,
                     'financial_year': fy,
-                    ...params
+                    'framework': framework,
+                    ...safeParams
                 });
             }
+        }
+
+        function escapeMarkup(value) {
+            return String(value ?? '').replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+        }
+
+        function scheduleCalculationAnalytics() {
+            clearTimeout(calculationAnalyticsTimer);
+            calculationAnalyticsTimer = setTimeout(() => trackEvent('calculate_metrics', { type: 'user_input' }), 800);
+        }
+
+        function scheduleVisualRefresh() {
+            clearTimeout(visualRefreshTimer);
+            visualRefreshTimer = setTimeout(() => calculateAll(), 150);
         }
 
         // Top Navbar Scroll Transition
@@ -707,7 +823,7 @@
                 localStorage.theme = 'light';
             }
             updateThemeIcon();
-            Chart.defaults.color = document.documentElement.classList.contains('dark') ? '#94a3b8' : '#475569';
+            if (typeof Chart !== 'undefined') Chart.defaults.color = document.documentElement.classList.contains('dark') ? '#94a3b8' : '#475569';
         }
 
         function updateThemeIcon() {
@@ -722,8 +838,10 @@
             if (isDark) { document.documentElement.classList.remove('dark'); localStorage.theme = 'light'; } 
             else { document.documentElement.classList.add('dark'); localStorage.theme = 'dark'; }
             updateThemeIcon();
-            Chart.defaults.color = !isDark ? '#94a3b8' : '#475569';
-            calculateAll();
+            if (typeof Chart !== 'undefined') Chart.defaults.color = !isDark ? '#94a3b8' : '#475569';
+            const project = appData.activeHash ? appData.projects[appData.activeHash] : null;
+            if (project?.framework === 'gri' && typeof renderOverview === 'function') renderOverview();
+            else calculateAll();
         }
 
         function toggleSidebar() {
@@ -745,7 +863,10 @@
             document.getElementById('nav-' + tabId.replace('tab-', '')).classList.add('active');
             
             trackEvent('tab_view', { 'tab_id': tabId });
-            setTimeout(() => calculateAll(), 50); 
+            const project = appData.projects[appData.activeHash];
+            if (tabId === 'tab-ambitions') renderAmbitions();
+            if (project?.framework === 'gri' && document.getElementById(tabId).classList.contains('gri-tab') && typeof renderGRITab === 'function') renderGRITab(tabId);
+            if (project?.framework !== 'gri' && !document.getElementById(tabId).classList.contains('gri-tab')) setTimeout(() => calculateAll(), 50);
         }
 
         // --- Multi-Project State Engine --- //
@@ -754,37 +875,44 @@
         }
 
         function saveAll() {
+            appData.schemaVersion = 2;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
         }
 
-        function createDefaultProjectData(name) {
+        function createDefaultProjectData(name, demo = false) {
             let hash = generateHash();
             let proj = {
                 name: name,
-                meta: { name: '', cin: '', author: '' },
+                meta: demo ? { name: 'Illustrative Manufacturing Ltd. (Demo)', cin: 'DEMO-2026', author: 'Sample reporting team' } : { name: '', cin: '', author: '' },
+                framework: 'brsr',
                 currentFY: '2026',
-                ambitions: [],
+                demo: demo,
+                ambitions: demo ? [{ id: 1, metric: 'ghg', year: '2030', target: 7500 }, { id: 2, metric: 'energy', year: '2030', target: 45 }] : [],
                 years: {}
             };
             
             ['2025', '2026', '2027', '2028'].forEach(fy => {
-                proj.years[fy] = { inputs: {}, ghgRows: [], waterIn: [], waterOut: [], metrics: { ghg: 0, water: 0, energy: 0, safety: 0 } };
-                proj.years[fy].ghgRows.push({desc: 'Grid Electricity', source: 'elec', customFactor: 1, activity: fy === '2026' ? 1500 : 0});
-                proj.years[fy].waterIn.push({source: 'Surface Water', amount: fy === '2026' ? 500 : 0});
-                proj.years[fy].waterOut.push({source: 'Surface Water', amount: fy === '2026' ? 50 : 0});
-                
-                if(fy === '2026') {
-                    proj.years[fy].inputs = {
-                        'g_revenue': 100000000, 'g_fte': 500, 'g_hours': 1040000,
-                        'nrg_ren': 2000, 'nrg_non': 8000, 'wst_gen': 150, 'wst_rec': 90, 'wst_disp': 60,
-                        'saf_spend': 1500000, 'saf_totalben': 25000000, 'saf_lti': 2,
-                        'div_wage_f': 8000000, 'div_wage_t': 25000000, 'div_posh_filed': 3,
-                        'inc_msme': 12000000, 'inc_totalpur': 40000000, 'inc_town_wages': 5000000, 'inc_total_wages': 25000000,
-                        'fair_cust_breach': 0, 'fair_tot_breach': 1, 'fair_ap': 4500000, 'fair_cogs': 30000000,
-                        'open_top10': 20000000, 'open_totalsales': 60000000, 'open_rp': 3000000, 'open_totcat': 100000000
-                    };
-                }
+                proj.years[fy] = { inputs: {}, ghgRows: [], waterIn: [], waterOut: [], metrics: { ghg: null, water: null, energy: null, safety: null } };
+                proj.years[fy].ghgRows.push({desc: 'Grid Electricity', source: 'elec', factor: ghgFactors.elec.value, factorSource: ghgFactors.elec.citation, activity: ''});
+                proj.years[fy].waterIn.push({source: 'Surface Water', amount: ''});
+                proj.years[fy].waterOut.push({source: 'Surface Water', amount: ''});
             });
+            if (demo) {
+                proj.years['2026'].inputs = {
+                    g_revenue: '1250000000', g_fte: '1200', g_hours: '2400000', water_use_est: false,
+                    nrg_ren: '35000', nrg_non: '65000', wst_gen: '1200', wst_rec: '900', wst_disp: '250',
+                    saf_spend: '2375000', saf_lti: '3', div_wage_f: '38000000', div_wage_t: '100000000', div_posh_filed: '2',
+                    inc_msme: '180000000', inc_totalpur: '500000000', inc_town_wages: '24000000', inc_total_wages: '100000000',
+                    fair_cust_breach: '1', fair_tot_breach: '4', fair_ap: '85000000', fair_cogs: '720000000',
+                    open_top10: '190000000', open_totalsales: '900000000', open_rp: '42000000', open_totcat: '1250000000', wat_est_rate: '45', wat_est_source: 'Illustrative benchmark; replace before reporting'
+                };
+                proj.years['2026'].ghgRows = [
+                    { desc: 'Grid electricity', source: 'elec', factor: 0.72, factorSource: 'Illustrative CEA factor; replace with reporting-year source', activity: '12500' },
+                    { desc: 'Company vehicles', source: 'car_d', factor: 0.16, factorSource: 'Illustrative transport factor; replace with approved source', activity: '320000' }
+                ];
+                proj.years['2026'].waterIn = [{ source: 'Surface Water', amount: '48000' }];
+                proj.years['2026'].waterOut = [{ source: 'Surface Water', amount: '31000' }];
+            }
             
             appData.projects[hash] = proj;
             appData.activeHash = hash;
@@ -846,7 +974,12 @@
                 let tab = document.createElement('div');
                 tab.className = `px-4 h-full flex items-center gap-2 cursor-pointer transition-colors text-sm max-w-[160px] ${activeClass}`;
                 tab.onclick = () => switchProject(hash);
-                tab.innerHTML = `<i class="fa-solid fa-folder-closed ${iconColor}"></i> <span class="truncate">${proj.name}</span>`;
+                const icon = document.createElement('i');
+                icon.className = `fa-solid fa-folder-closed ${iconColor}`;
+                const label = document.createElement('span');
+                label.className = 'truncate';
+                label.textContent = proj.name;
+                tab.append(icon, label);
                 container.appendChild(tab);
             }
         }
@@ -912,10 +1045,10 @@
                 saveDOMToFY();
                 let activeProj = appData.projects[appData.activeHash];
                 activeProj.currentFY = newFY;
-                activeProj.years[newFY] = { inputs: {}, ghgRows: [], waterIn: [], waterOut: [], metrics: { ghg: 0, water: 0, energy: 0, safety: 0 } };
-                activeProj.years[newFY].ghgRows.push({desc: 'Grid Electricity', source: 'elec', customFactor: 1, activity: 0});
-                activeProj.years[newFY].waterIn.push({source: 'Surface Water', amount: 0});
-                activeProj.years[newFY].waterOut.push({source: 'Surface Water', amount: 0});
+                activeProj.years[newFY] = { inputs: {}, ghgRows: [], waterIn: [], waterOut: [], metrics: { ghg: null, water: null, energy: null, safety: null } };
+                activeProj.years[newFY].ghgRows.push({desc: 'Grid Electricity', source: 'elec', factor: ghgFactors.elec.value, factorSource: ghgFactors.elec.citation, activity: ''});
+                activeProj.years[newFY].waterIn.push({source: 'Surface Water', amount: ''});
+                activeProj.years[newFY].waterOut.push({source: 'Surface Water', amount: ''});
                 
                 updateFYSelector();
                 loadFYToDOM();
@@ -930,7 +1063,7 @@
             let existingYears = Object.keys(activeProj.years);
             
             if (existingYears.length <= 1) {
-                alert("Cannot delete the only financial year. Add another year first, or delete the entire workspace instead.");
+                alert("Add another financial year before deleting this one, or delete the workspace instead.");
                 return;
             }
             
@@ -968,8 +1101,25 @@
         }
 
         function loadState() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if(saved) { appData = JSON.parse(saved); }
+            const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
+            if (!saved) return;
+            try {
+                const parsed = JSON.parse(saved);
+                if (!parsed || typeof parsed !== 'object' || !parsed.projects) throw new Error('Invalid saved state');
+                const projects = {};
+                Object.entries(parsed.projects).forEach(([hash, project]) => {
+                    try {
+                        projects[hash] = validateImportedProject({ schemaVersion: 2, project });
+                    } catch (error) {
+                        console.error(`Saved workspace ${hash} was skipped.`, error);
+                    }
+                });
+                appData = { schemaVersion: 2, activeHash: projects[parsed.activeHash] ? parsed.activeHash : Object.keys(projects)[0] || null, projects };
+                saveAll();
+            } catch (error) {
+                console.error('Saved data could not be loaded.', error);
+                appData = { schemaVersion: 2, activeHash: null, projects: {} };
+            }
         }
 
         function saveDOMToFY() {
@@ -981,10 +1131,10 @@
             let data = activeProj.years[fy];
             if(!data) return;
             
-            const excludeIds = ['amb-year', 'amb-target', 'project_name_inline', 'new-fy-input', 'meta_name', 'meta_cin', 'meta_author'];
+            const excludeIds = ['amb-year', 'amb-target', 'project_name_inline', 'meta_name', 'meta_cin', 'meta_author'];
             
             document.querySelectorAll('input[type="number"], .std-input').forEach(el => {
-                if(el.id && !excludeIds.includes(el.id) && !el.classList.contains('ghg-desc') && !el.classList.contains('wat-amount')){
+                if(el.id && !el.closest('.gri-tab') && !excludeIds.includes(el.id) && !el.classList.contains('ghg-desc') && !el.classList.contains('wat-amount')){
                     data.inputs[el.id] = el.value;
                 }
             });
@@ -1000,7 +1150,10 @@
                     desc: row.querySelector('.ghg-desc').value,
                     source: row.querySelector('.ghg-select').value,
                     activity: row.querySelector('.ghg-activity').value,
-                    customFactor: row.querySelector('.ghg-factor').value
+                    factor: row.querySelector('.ghg-factor').value,
+                    factorSource: row.querySelector('.ghg-factor-source').value,
+                    scale: row.querySelector('.ghg-scale').value,
+                    unit: row.querySelector('.ghg-unit').innerText
                 });
             });
 
@@ -1017,17 +1170,19 @@
         }
 
         function loadFYToDOM() {
+            if (typeof clearValidationSummary === 'function') clearValidationSummary();
             let activeProj = appData.projects[appData.activeHash];
             let fy = activeProj.currentFY;
             let data = activeProj.years[fy];
             if(!data) return;
 
-            document.querySelectorAll('input[type="number"]').forEach(el => { if(!el.classList.contains('ghg-factor') && !el.classList.contains('ghg-scale')) el.value = 0; });
+            document.querySelectorAll('input[type="number"]').forEach(el => { if(!el.classList.contains('ghg-factor') && !el.classList.contains('ghg-scale')) el.value = ''; });
+            document.getElementById('wat_est_source').value = '';
             for(let id in data.inputs) {
                 let el = document.getElementById(id);
                 if(el) { if(el.type === 'checkbox') el.checked = data.inputs[id]; else el.value = data.inputs[id]; }
             }
-            toggleWaterMode();
+            toggleWaterMode(false);
 
             document.getElementById('meta_name').value = activeProj.meta.name;
             document.getElementById('meta_cin').value = activeProj.meta.cin;
@@ -1036,19 +1191,22 @@
             document.getElementById('ghg-container').innerHTML = '';
             ghgRowCount = 0;
             data.ghgRows.forEach(r => {
-                addGHGRow();
+                addGHGRow(false);
                 let row = document.getElementById(`ghg-row-${ghgRowCount}`);
                 row.querySelector('.ghg-desc').value = r.desc;
                 row.querySelector('.ghg-select').value = r.source;
-                updateGHGFactor(`ghg-row-${ghgRowCount}`);
-                if(r.source === 'custom') row.querySelector('.ghg-factor').value = r.customFactor;
+                updateGHGFactor(`ghg-row-${ghgRowCount}`, false);
+                row.querySelector('.ghg-factor').value = r.factor ?? r.customFactor ?? ghgFactors[r.source]?.value ?? 0;
+                if (r.factorSource) row.querySelector('.ghg-factor-source').value = r.factorSource;
+                row.querySelector('.ghg-scale').value = r.scale ?? ghgFactors[r.source]?.scale ?? 1;
+                row.querySelector('.ghg-unit').innerText = r.unit || ghgFactors[r.source]?.unit || 'units';
                 row.querySelector('.ghg-activity').value = r.activity;
             });
 
             document.getElementById('water-withdrawal-container').innerHTML = '';
             waterRowCounts.withdrawal = 0;
             data.waterIn.forEach(r => {
-                addWaterRow('withdrawal');
+                addWaterRow('withdrawal', false);
                 let row = document.getElementById(`wat-withdrawal-${waterRowCounts.withdrawal}`);
                 row.querySelector('select').value = r.source;
                 row.querySelector('.wat-amount').value = r.amount;
@@ -1057,18 +1215,20 @@
             document.getElementById('water-discharge-container').innerHTML = '';
             waterRowCounts.discharge = 0;
             data.waterOut.forEach(r => {
-                addWaterRow('discharge');
+                addWaterRow('discharge', false);
                 let row = document.getElementById(`wat-discharge-${waterRowCounts.discharge}`);
                 row.querySelector('select').value = r.source;
                 row.querySelector('.wat-amount').value = r.amount;
             });
 
             calculateAll();
+            if (typeof initGRI === 'function') initGRI();
         }
 
         // Save safely on change
         document.addEventListener('change', (e) => {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') {
+            if ((e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') && !e.target.closest('.gri-tab')) {
+                clearValidationSummary();
                 saveDOMToFY();
                 trackEvent('field_input_changed', { field_id: e.target.id || e.target.className });
             }
@@ -1076,58 +1236,69 @@
 
         // Trigger math calculation live on typing
         document.addEventListener('input', (e) => {
-            if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
-                if(e.target.id && !e.target.id.startsWith('amb-')) e.target.value = Math.abs(e.target.value);
-                calculateAll();
+            if (e.target.tagName === 'INPUT' && e.target.type === 'number' && !e.target.closest('.gri-tab')) {
+                clearValidationSummary();
+                calculateAll({ renderVisuals: false });
+                saveDOMToFY();
+                scheduleCalculationAnalytics();
+                scheduleVisualRefresh();
+            } else if (e.target.matches('input.std-input') && !e.target.closest('.gri-tab')) {
+                if (e.target.classList.contains('ghg-factor-source')) {
+                    clearValidationSummary();
+                    calculateAll();
+                }
+                saveDOMToFY();
+                if (['meta_name', 'meta_cin', 'meta_author'].includes(e.target.id) && typeof refreshGRISharedViews === 'function') refreshGRISharedViews();
             }
         });
 
         // Safe Light-Mode PDF Export
-        function downloadPDF() {
-            trackEvent('download_pdf');
+        async function downloadPDF() {
+            if (typeof html2pdf !== 'function') {
+                alert('Wait a few seconds, then select Export PDF again.');
+                return;
+            }
             const element = document.getElementById('dashboard-export-area');
             const compName = document.getElementById('meta_name').value || 'Company_Report';
-            
             const wasDark = document.documentElement.classList.contains('dark');
-            
+            const previousAnimation = typeof Chart !== 'undefined' ? Chart.defaults.animation : undefined;
             if (wasDark) {
                 document.documentElement.classList.remove('dark');
-                Chart.defaults.color = '#475569';
+                if (typeof Chart !== 'undefined') Chart.defaults.color = '#475569';
             }
-            
-            Chart.defaults.animation = false;
+            if (typeof Chart !== 'undefined') Chart.defaults.animation = false;
+            const presentation = PDFExport.prepare(element, { width: '1600px', chartHeight: '220px' });
+            const captureWidth = element.scrollWidth;
             calculateAll();
-
-            const originalStyle = element.style.cssText;
-            element.style.width = '1200px';
-            element.style.maxWidth = '1200px';
-            element.style.padding = '20px';
-            element.style.background = '#ffffff';
-
             const opt = {
-                margin: 0.5,
+                margin: 0.25,
                 filename: `${compName.replace(/\s+/g, '_')}_BRSR_Core_${appData.projects[appData.activeHash].currentFY}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, windowWidth: 1200, logging: false },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+                pagebreak: { mode: [] },
+                html2canvas: { scale: 2, useCORS: true, width: captureWidth, windowWidth: captureWidth, logging: false },
+                jsPDF: { unit: 'in', format: 'a3', orientation: 'landscape' }
             };
-
-            setTimeout(() => { 
-                html2pdf().set(opt).from(element).save().then(() => { 
-                    element.style.cssText = originalStyle; 
-                    if (wasDark) {
-                        document.documentElement.classList.add('dark');
-                        Chart.defaults.color = '#94a3b8';
-                    }
-                    Chart.defaults.animation = { duration: 800, easing: 'easeOutQuart' };
-                    calculateAll();
-                }); 
-            }, 500);
+            try {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await html2pdf().set(opt).from(element).save();
+                trackEvent('download_pdf');
+            } catch (error) {
+                alert('The BRSR dashboard could not be exported. Check your connection and try again.');
+                trackEvent('download_pdf_failed');
+            } finally {
+                presentation.restore();
+                if (wasDark) {
+                    document.documentElement.classList.add('dark');
+                    if (typeof Chart !== 'undefined') Chart.defaults.color = '#94a3b8';
+                }
+                if (typeof Chart !== 'undefined') Chart.defaults.animation = previousAnimation;
+                calculateAll();
+            }
         }
 
-        function addGHGRow() {
+        function addGHGRow(track = true) {
             ghgRowCount++;
-            trackEvent('add_ghg_source', { total_sources: ghgRowCount });
+            if (track) trackEvent('add_ghg_source');
             const rowId = `ghg-row-${ghgRowCount}`;
             let optionsHtml = '';
             for (const [key, data] of Object.entries(ghgFactors)) { optionsHtml += `<option value="${key}">${data.label}</option>`; }
@@ -1136,16 +1307,22 @@
                 <div id="${rowId}" class="ghg-entry bg-slate-50 dark:bg-slate-900/50 p-4 rounded border border-slate-200 dark:border-slate-700 grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                     <div class="md:col-span-3"><label class="text-xs dark:text-slate-300">Description</label><input type="text" class="ghg-desc text-sm std-input" placeholder="e.g. Factory Power" value="Source ${ghgRowCount}"></div>
                     <div class="md:col-span-3"><label class="text-xs dark:text-slate-300">Factor Source</label><select onchange="updateGHGFactor('${rowId}')" class="ghg-select text-sm w-full border rounded p-2 dark:border-slate-600 dark:bg-slate-800">${optionsHtml}</select></div>
-                    <div class="md:col-span-2"><label class="text-xs dark:text-slate-300">Factor Value</label><input type="number" step="0.000001" class="ghg-factor text-sm" value="${ghgFactors['elec'].value}" readonly><input type="hidden" class="ghg-scale" value="${ghgFactors['elec'].scale}"></div>
-                    <div class="md:col-span-3"><label class="text-xs dark:text-slate-300">Activity (<span class="ghg-unit">${ghgFactors['elec'].unit}</span>)</label><input type="number" min="0" class="ghg-activity text-sm" value="0"></div>
-                    <div class="md:col-span-1 flex justify-between items-center pb-2"><span class="font-bold text-blue-600 dark:text-blue-400 ghg-row-total hidden">0.00</span><div class="flex-1 text-right font-bold text-blue-600 dark:text-blue-400 ghg-row-total-display text-sm pr-2">0.00</div><button aria-label="Remove GHG Source Row" onclick="removeElement('${rowId}')" class="text-red-500 hover:text-red-700 focus:outline-none"><i class="fa-solid fa-trash"></i></button></div>
+                    <div class="md:col-span-2"><label class="text-xs dark:text-slate-300">Factor Value</label><input type="number" step="0.000001" min="0" class="ghg-factor text-sm" value="${ghgFactors['elec'].value}" readonly><input type="hidden" class="ghg-scale" value="${ghgFactors['elec'].scale}"></div>
+                    <div class="md:col-span-3"><label class="text-xs dark:text-slate-300">Activity (<span class="ghg-unit">${ghgFactors['elec'].unit}</span>)</label><input type="number" min="0" class="ghg-activity text-sm" value=""></div>
+                    <div class="md:col-span-1 flex justify-between items-center pb-2"><div class="flex-1 text-right font-bold text-blue-600 dark:text-blue-400 ghg-row-total-display text-sm pr-2">0.00</div><button aria-label="Remove GHG Source Row" onclick="removeElement('${rowId}')" class="text-red-500 hover:text-red-700 focus:outline-none"><i class="fa-solid fa-trash"></i></button></div>
+                    <div class="md:col-span-12"><label class="block text-[10px] text-slate-500">Factor reference</label><input type="text" class="ghg-factor-source text-xs std-input" value="${ghgFactors['elec'].citation}"></div>
                 </div>`;
             document.getElementById('ghg-container').insertAdjacentHTML('beforeend', rowHtml);
+            if (track) {
+                clearValidationSummary();
+                calculateAll();
+                saveDOMToFY();
+            }
         }
 
-        function removeElement(rowId) { const el = document.getElementById(rowId); if (el) { el.remove(); calculateAll(); } }
+        function removeElement(rowId) { const el = document.getElementById(rowId); if (el) { el.remove(); clearValidationSummary(); calculateAll(); saveDOMToFY(); } }
 
-        function updateGHGFactor(rowId) {
+        function updateGHGFactor(rowId, recalculate = true) {
             const row = document.getElementById(rowId);
             if (!row) return;
             const selectVal = row.querySelector('.ghg-select').value;
@@ -1153,28 +1330,35 @@
             const data = ghgFactors[selectVal];
             row.querySelector('.ghg-unit').innerText = data.unit;
             row.querySelector('.ghg-scale').value = data.scale;
+            row.querySelector('.ghg-factor-source').value = data.citation;
             if (selectVal === 'custom') { factorInput.removeAttribute('readonly'); factorInput.value = 1; } 
             else { factorInput.setAttribute('readonly', 'true'); factorInput.value = data.value; }
-            calculateAll();
+            if (recalculate) calculateAll();
         }
 
-        function toggleWaterMode() {
+        function toggleWaterMode(recalculate = true) {
             const isEst = document.getElementById('water_use_est').checked;
             document.getElementById('water-direct-mode').style.display = isEst ? 'none' : 'block';
             document.getElementById('water-est-mode').style.display = isEst ? 'grid' : 'none';
-            calculateAll();
+            if (recalculate) calculateAll();
         }
 
-        function addWaterRow(type) {
+        function addWaterRow(type, track = true) {
             waterRowCounts[type]++;
-            trackEvent('add_water_row', { type: type });
+            if (track) trackEvent('add_water_row', { type: type });
             const rowId = `wat-${type}-${waterRowCounts[type]}`;
             const optionsHtml = waterSources.map(s => `<option value="${s}">${s}</option>`).join('');
-            const rowHtml = `<div id="${rowId}" class="wat-entry flex gap-2 items-center"><select class="w-1/2 text-sm border rounded p-2 dark:border-slate-600 dark:bg-slate-800">${optionsHtml}</select><div class="w-1/3 relative flex items-center"><input type="number" min="0" class="wat-amount w-full text-sm border rounded p-2 dark:border-slate-600 dark:bg-slate-800" value="0"><span class="absolute right-3 text-xs text-slate-400">kL</span></div><button aria-label="Remove Water Entry Row" onclick="removeElement('${rowId}')" class="text-red-400 hover:text-red-600 p-2 focus:outline-none"><i class="fa-solid fa-xmark"></i></button></div>`;
+            const rowHtml = `<div id="${rowId}" class="wat-entry flex gap-2 items-center"><select class="w-1/2 text-sm border rounded p-2 dark:border-slate-600 dark:bg-slate-800">${optionsHtml}</select><div class="w-1/3 relative flex items-center"><input type="number" min="0" class="wat-amount w-full text-sm border rounded p-2 dark:border-slate-600 dark:bg-slate-800" value=""><span class="absolute right-3 text-xs text-slate-400">kL</span></div><button aria-label="Remove Water Entry Row" onclick="removeElement('${rowId}')" class="text-red-400 hover:text-red-600 p-2 focus:outline-none"><i class="fa-solid fa-xmark"></i></button></div>`;
             document.getElementById(`water-${type}-container`).insertAdjacentHTML('beforeend', rowHtml);
+            if (track) {
+                clearValidationSummary();
+                calculateAll();
+                saveDOMToFY();
+            }
         }
 
         function drawLocalChart(chartKey, canvasId, type, labels, dataArr, colors, useLogScale = false) {
+            if (typeof Chart === 'undefined') return;
             const isDark = document.documentElement.classList.contains('dark');
             const gridColor = isDark ? '#334155' : '#e2e8f0';
             const ctx = document.getElementById(canvasId).getContext('2d');
@@ -1191,13 +1375,33 @@
             charts[chartKey] = new Chart(ctx, { type: type, data: { labels: labels, datasets: [{ label: 'Value', data: dataArr, backgroundColor: colors, borderColor: isDark ? '#0f172a' : '#ffffff', borderWidth: 2 }] }, options: options });
         }
 
-        function calculateAll() {
+        function calculateAll(options = {}) {
             try {
                 let activeProj = appData.projects[appData.activeHash];
                 if(!activeProj || !activeProj.years[activeProj.currentFY]) return;
 
-                const rev = parseFloat(document.getElementById('g_revenue').value) || 1;
-                const hours = parseFloat(document.getElementById('g_hours').value) || 1;
+                const errors = [];
+                const read = (id, label) => {
+                    const raw = document.getElementById(id).value;
+                    if (raw === '') return null;
+                    const result = ESGCalculations.nonNegative(raw, label);
+                    if (result.error) errors.push(result.error);
+                    return result.value;
+                };
+                const chartValue = value => value === null ? 0 : value;
+                const show = (id, result, digits = 2) => {
+                    document.getElementById(id).innerText = result.value === null ? '—' : result.value.toFixed(digits);
+                    if (result.error) errors.push(result.error);
+                };
+                const sumElements = (selector, label) => {
+                    const result = ESGCalculations.sum([...document.querySelectorAll(selector)].map(element => element.value), label);
+                    errors.push(...result.errors);
+                    return result.value;
+                };
+                const rev = read('g_revenue', 'Total revenue');
+                read('g_fte', 'Total employees');
+                const hours = read('g_hours', 'Total working hours');
+                read('div_posh_filed', 'POSH complaints filed');
 
                 document.getElementById('dash_meta_name').innerText = document.getElementById('meta_name').value || '-';
                 document.getElementById('dash_meta_cin').innerText = document.getElementById('meta_cin').value || '-';
@@ -1205,115 +1409,148 @@
                 document.getElementById('dash_meta_author').innerText = document.getElementById('meta_author').value || '-';
 
                 // 1. GHG
-                let totalGHG = 0; let ghgLabels = [], ghgData = []; let hasValidData = false;
-                document.querySelectorAll('.ghg-entry').forEach(row => {
-                    const desc = row.querySelector('.ghg-desc').value || 'Unknown';
-                    const factor = parseFloat(row.querySelector('.ghg-factor').value) || 0;
-                    const activity = parseFloat(row.querySelector('.ghg-activity').value) || 0;
-                    const scale = parseFloat(row.querySelector('.ghg-scale').value) || 1;
-                    const rowTotal = factor * activity * scale;
-                    row.querySelector('.ghg-row-total').innerText = rowTotal.toFixed(2);
-                    row.querySelector('.ghg-row-total-display').innerText = rowTotal.toFixed(2);
-                    totalGHG += rowTotal;
-                    if (rowTotal > 0) { ghgLabels.push(desc); ghgData.push(rowTotal); hasValidData = true; }
+                const ghgRows = [...document.querySelectorAll('.ghg-entry')].map(row => ({
+                    factor: row.querySelector('.ghg-factor').value,
+                    activity: row.querySelector('.ghg-activity').value,
+                    scale: row.querySelector('.ghg-scale').value,
+                    factorSource: row.querySelector('.ghg-factor-source').value
+                }));
+                const ghgResult = ESGCalculations.ghgTotal(ghgRows);
+                errors.push(...ghgResult.errors);
+                ghgRows.forEach((row, index) => {
+                    if (row.activity !== '' && (!row.factorSource.trim() || /verify|user-supplied factor|replace/i.test(row.factorSource))) errors.push(`GHG source ${index + 1}: replace the placeholder factor note with a verified source, version, geography, year, and units.`);
                 });
-                if (!hasValidData) { ghgLabels = ['No Data']; ghgData = [0]; }
-                document.getElementById('res_ghg_total').innerText = totalGHG.toFixed(2);
-                document.getElementById('res_ghg_intensity').innerText = (totalGHG / rev).toFixed(8);
+                let ghgLabels = [], ghgData = [];
+                document.querySelectorAll('.ghg-entry').forEach((row, index) => {
+                    const desc = row.querySelector('.ghg-desc').value || 'Unknown';
+                    const rowTotal = ghgResult.values[index];
+                    const displayed = rowTotal === null ? '—' : rowTotal.toFixed(2);
+                    row.querySelector('.ghg-row-total-display').innerText = displayed;
+                    if (rowTotal !== null && rowTotal > 0) { ghgLabels.push(desc); ghgData.push(rowTotal); }
+                });
+                if (!ghgData.length) { ghgLabels = ['No Data']; ghgData = [0]; }
+                document.getElementById('res_ghg_total').innerText = ghgResult.total === null ? '—' : ghgResult.total.toFixed(2);
+                const ghgIntensity = ESGCalculations.intensity(ghgResult.total, rev, 'GHG intensity', 'calculated GHG emissions', 'Total Revenue in BRSR Operational Data');
+                show('res_ghg_intensity', ghgIntensity, 8);
                 const ghgColors = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e'];
-                drawLocalChart('l1', 'localChart_1', 'bar', ghgLabels, ghgData, ghgColors, true);
+                if (options.renderVisuals !== false) drawLocalChart('l1', 'localChart_1', 'bar', ghgLabels, ghgData, ghgColors, true);
 
                 // 2. Water
-                let w_con = 0, w_in_tot = 0, w_out_tot = 0;
+                let wConResult, w_in_tot = null, w_out_tot = null;
                 if (document.getElementById('water_use_est').checked) {
-                    const emp = parseFloat(document.getElementById('wat_est_emp').value) || 0;
-                    const days = parseFloat(document.getElementById('wat_est_days').value) || 0;
-                    w_con = (emp * days * 45) / 1000; w_in_tot = w_con;
+                    const emp = read('wat_est_emp', 'Water estimate employees');
+                    const days = read('wat_est_days', 'Water estimate working days');
+                    const rate = read('wat_est_rate', 'Water estimate litres per employee-day');
+                    if (emp === null && days === null && rate === null) {
+                        wConResult = { value: null, error: null };
+                    } else if (emp === null || days === null || rate === null) {
+                        wConResult = { value: null, error: 'Water estimate: enter employees, working days, and litres per employee-day.' };
+                    } else {
+                        wConResult = { value: (emp * days * rate) / 1000, error: null };
+                        w_in_tot = wConResult.value;
+                        if (!document.getElementById('wat_est_source').value.trim()) errors.push('Water estimate: enter the benchmark or approved method source and version.');
+                    }
                 } else {
-                    document.querySelectorAll('#water-withdrawal-container .wat-amount').forEach(el => w_in_tot += (parseFloat(el.value) || 0));
-                    document.querySelectorAll('#water-discharge-container .wat-amount').forEach(el => w_out_tot += (parseFloat(el.value) || 0));
-                    w_con = Math.max(0, w_in_tot - w_out_tot);
+                    w_in_tot = sumElements('#water-withdrawal-container .wat-amount', 'Water withdrawal');
+                    w_out_tot = sumElements('#water-discharge-container .wat-amount', 'Water discharge');
+                    wConResult = ESGCalculations.waterBalance(w_in_tot, w_out_tot);
                 }
-                document.getElementById('res_wat_consumed').innerText = w_con.toFixed(2);
-                document.getElementById('res_wat_intensity').innerText = (w_con / rev).toFixed(8);
-                drawLocalChart('l2', 'localChart_2', 'bar', ['Withdrawal', 'Discharge', 'Net Consumed'], [w_in_tot, w_out_tot, w_con], ['#0ea5e9', '#3b82f6', '#10b981']);
+                show('res_wat_consumed', wConResult, 2);
+                const waterIntensity = wConResult.value === null ? { value: null, error: null } : ESGCalculations.intensity(wConResult.value, rev, 'Water intensity', 'calculated water consumption', 'Total Revenue in BRSR Operational Data');
+                show('res_wat_intensity', waterIntensity, 8);
+                if (options.renderVisuals !== false) drawLocalChart('l2', 'localChart_2', 'bar', ['Withdrawal', 'Discharge', 'Net Consumed'], [chartValue(w_in_tot), chartValue(w_out_tot), chartValue(wConResult.value)], ['#0ea5e9', '#3b82f6', '#10b981']);
 
                 // 3. Energy
-                const e_ren = parseFloat(document.getElementById('nrg_ren').value) || 0;
-                const e_non = parseFloat(document.getElementById('nrg_non').value) || 0;
-                const e_tot = e_ren + e_non;
-                const e_perc = e_tot > 0 ? ((e_ren / e_tot) * 100).toFixed(2) : 0;
-                document.getElementById('res_nrg_total').innerText = e_tot.toFixed(2);
-                document.getElementById('res_nrg_perc').innerText = e_perc;
-                document.getElementById('res_nrg_intensity').innerText = (e_tot / rev).toFixed(8);
-                drawLocalChart('l3', 'localChart_3', 'doughnut', ['Renewable', 'Non-Renewable'], [e_ren, e_non], ['#10b981', '#64748b']);
+                const e_ren = read('nrg_ren', 'Renewable energy');
+                const e_non = read('nrg_non', 'Non-renewable energy');
+                const energyTotal = ESGCalculations.sum([e_ren, e_non], 'Energy');
+                errors.push(...energyTotal.errors);
+                const energyPercentage = ESGCalculations.percentage(e_ren, energyTotal.value, 'Renewable energy percentage', 'Renewable Sources', 'total energy');
+                const energyIntensity = ESGCalculations.intensity(energyTotal.value, rev, 'Energy intensity', 'total energy', 'Total Revenue in BRSR Operational Data');
+                document.getElementById('res_nrg_total').innerText = energyTotal.value === null ? '—' : energyTotal.value.toFixed(2);
+                show('res_nrg_perc', energyPercentage, 2);
+                show('res_nrg_intensity', energyIntensity, 8);
+                if (options.renderVisuals !== false) drawLocalChart('l3', 'localChart_3', 'doughnut', ['Renewable', 'Non-Renewable'], [chartValue(e_ren), chartValue(e_non)], ['#10b981', '#64748b']);
 
                 // 4. Waste
-                const wst_g = parseFloat(document.getElementById('wst_gen').value) || 0;
-                const wst_r = parseFloat(document.getElementById('wst_rec').value) || 0;
-                const wst_d = parseFloat(document.getElementById('wst_disp').value) || 0;
-                document.getElementById('res_wst_intensity').innerText = (wst_g / rev).toFixed(8);
-                document.getElementById('res_wst_perc').innerText = wst_g > 0 ? ((wst_r / wst_g) * 100).toFixed(2) : 0;
-                const wst_oth = Math.max(0, wst_g - wst_r - wst_d);
-                drawLocalChart('l4', 'localChart_4', 'pie', ['Recycled', 'Disposed', 'Other'], [wst_r, wst_d, wst_oth], ['#10b981', '#f43f5e', '#94a3b8']);
+                const wst_g = read('wst_gen', 'Waste generated');
+                const wst_r = read('wst_rec', 'Waste recycled or reused');
+                const wst_d = read('wst_disp', 'Waste sent to disposal');
+                const wasteIntensity = ESGCalculations.intensity(wst_g, rev, 'Waste intensity', 'Waste Generated', 'Total Revenue in BRSR Operational Data');
+                const wastePercentage = ESGCalculations.percentage(wst_r, wst_g, 'Waste recycled percentage', 'Waste Recycled', 'Waste Generated');
+                const wasteReconciliation = ESGCalculations.wasteBalance(wst_g, wst_r, wst_d);
+                show('res_wst_intensity', wasteIntensity, 8);
+                show('res_wst_perc', wastePercentage, 2);
+                if (wasteReconciliation.error) errors.push(wasteReconciliation.error);
+                if (options.renderVisuals !== false) drawLocalChart('l4', 'localChart_4', 'pie', ['Recycled', 'Disposed', 'Other'], wasteReconciliation.value === null ? [0, 0, 0] : [chartValue(wst_r), chartValue(wst_d), wasteReconciliation.value], ['#10b981', '#f43f5e', '#94a3b8']);
 
                 // 5. Safety
-                const saf_s = parseFloat(document.getElementById('saf_spend').value) || 0;
-                const saf_tb = parseFloat(document.getElementById('saf_totalben').value) || 1;
-                const saf_l = parseFloat(document.getElementById('saf_lti').value) || 0;
-                const saf_perc = ((saf_s / saf_tb) * 100).toFixed(2);
-                document.getElementById('res_saf_perc').innerText = saf_perc;
-                document.getElementById('res_saf_ltifr').innerText = ((saf_l * 1000000) / hours).toFixed(2);
-                drawLocalChart('l5', 'localChart_5', 'doughnut', ['Well-being Spend', 'Other Benefits'], [saf_s, Math.max(0, saf_tb - saf_s)], ['#3b82f6', '#cbd5e1']);
+                const saf_s = read('saf_spend', 'Well-being spending');
+                const saf_l = read('saf_lti', 'Lost time injuries');
+                const safetyPercentage = ESGCalculations.percentage(saf_s, rev, 'Well-being spend percentage', 'Well-being & Safety Spend', 'Total Revenue in BRSR Operational Data');
+                const ltifr = ESGCalculations.divide(saf_l, hours, 1000000, 'LTIFR', 'Lost Time Injuries', 'Total Working Hours in BRSR Operational Data');
+                show('res_saf_perc', safetyPercentage, 2);
+                show('res_saf_ltifr', ltifr, 2);
+                if (options.renderVisuals !== false) drawLocalChart('l5', 'localChart_5', 'doughnut', ['Well-being Spend', 'Other Revenue'], safetyPercentage.value === null ? [0, 0] : [saf_s, rev - saf_s], ['#3b82f6', '#cbd5e1']);
 
                 // 6. Diversity
-                const div_wf = parseFloat(document.getElementById('div_wage_f').value) || 0;
-                const div_wt = parseFloat(document.getElementById('div_wage_t').value) || 1;
-                const div_wperc = ((div_wf / div_wt) * 100).toFixed(2);
-                document.getElementById('res_div_wage_perc').innerText = div_wperc;
-                drawLocalChart('l6', 'localChart_6', 'pie', ['Female Wages', 'Other Wages'], [div_wf, Math.max(0, div_wt - div_wf)], ['#8b5cf6', '#cbd5e1']);
+                const div_wf = read('div_wage_f', 'Wages to female employees');
+                const div_wt = read('div_wage_t', 'Total wages');
+                const diversityPercentage = ESGCalculations.percentage(div_wf, div_wt, 'Female wage share', 'Wages Paid to Females', 'Total Wages');
+                show('res_div_wage_perc', diversityPercentage, 2);
+                if (options.renderVisuals !== false) drawLocalChart('l6', 'localChart_6', 'pie', ['Female Wages', 'Other Wages'], diversityPercentage.value === null ? [0, 0] : [div_wf, div_wt - div_wf], ['#8b5cf6', '#cbd5e1']);
 
                 // 7. Inclusive
-                const inc_m = parseFloat(document.getElementById('inc_msme').value) || 0;
-                const inc_tp = parseFloat(document.getElementById('inc_totalpur').value) || 1;
-                const inc_tw = parseFloat(document.getElementById('inc_town_wages').value) || 0;
-                const inc_ttw = parseFloat(document.getElementById('inc_total_wages').value) || 1;
-                const m_perc = ((inc_m / inc_tp) * 100).toFixed(2);
-                const t_perc = ((inc_tw / inc_ttw) * 100).toFixed(2);
-                document.getElementById('res_inc_msme_perc').innerText = m_perc;
-                document.getElementById('res_inc_town_perc').innerText = t_perc;
-                drawLocalChart('l7', 'localChart_7', 'bar', ['MSME Purchases', 'Small Town Wages'], [inc_m, inc_tw], ['#f59e0b', '#3b82f6']);
+                const inc_m = read('inc_msme', 'MSME purchases');
+                const inc_tp = read('inc_totalpur', 'Total purchases');
+                const inc_tw = read('inc_town_wages', 'Small-town wages');
+                const inc_ttw = read('inc_total_wages', 'Total wages for inclusive development');
+                const msmePercentage = ESGCalculations.percentage(inc_m, inc_tp, 'MSME purchasing percentage', 'Purchases from MSMEs', 'Total Purchases');
+                const townPercentage = ESGCalculations.percentage(inc_tw, inc_ttw, 'Small-town wage percentage', 'Wages in Smaller Towns', 'Total Wages');
+                show('res_inc_msme_perc', msmePercentage, 2);
+                show('res_inc_town_perc', townPercentage, 2);
+                if (options.renderVisuals !== false) drawLocalChart('l7', 'localChart_7', 'bar', ['MSME Purchases', 'Small Town Wages'], [chartValue(inc_m), chartValue(inc_tw)], ['#f59e0b', '#3b82f6']);
 
                 // 8. Fairness
-                const f_cb = parseFloat(document.getElementById('fair_cust_breach').value) || 0;
-                const f_tb = parseFloat(document.getElementById('fair_tot_breach').value) || 1;
-                const f_ap = parseFloat(document.getElementById('fair_ap').value) || 0;
-                const f_cogs = parseFloat(document.getElementById('fair_cogs').value) || 1;
-                document.getElementById('res_fair_breach_perc').innerText = f_tb > 0 ? ((f_cb / f_tb) * 100).toFixed(2) : 0;
-                document.getElementById('res_fair_dpo').innerText = ((f_ap / f_cogs) * 365).toFixed(0);
-                drawLocalChart('l8', 'localChart_8', 'doughnut', ['Customer Breaches', 'Other Breaches'], [f_cb, Math.max(0, f_tb - f_cb)], ['#ef4444', '#cbd5e1']);
+                const f_cb = read('fair_cust_breach', 'Customer data breaches');
+                const f_tb = read('fair_tot_breach', 'Total data breaches');
+                const f_ap = read('fair_ap', 'Average accounts payable');
+                const f_cogs = read('fair_cogs', 'Total cost of goods sold');
+                const breachPercentage = ESGCalculations.percentage(f_cb, f_tb, 'Customer breach share', 'Customer Data Breaches', 'Total Data Breaches');
+                const dpo = ESGCalculations.divide(f_ap, f_cogs, 365, 'Days payable outstanding', 'Average Accounts Payable', 'Cost of Goods Sold');
+                show('res_fair_breach_perc', breachPercentage, 2);
+                show('res_fair_dpo', dpo, 0);
+                if (options.renderVisuals !== false) drawLocalChart('l8', 'localChart_8', 'doughnut', ['Customer Breaches', 'Other Breaches'], breachPercentage.value === null ? [0, 0] : [f_cb, f_tb - f_cb], ['#ef4444', '#cbd5e1']);
 
                 // 9. Openness
-                const o_t10 = parseFloat(document.getElementById('open_top10').value) || 0;
-                const o_ts = parseFloat(document.getElementById('open_totalsales').value) || 1;
-                const o_rp = parseFloat(document.getElementById('open_rp').value) || 0;
-                const o_tc = parseFloat(document.getElementById('open_totcat').value) || 1;
-                const o_rpperc = ((o_rp / o_tc) * 100).toFixed(2);
-                document.getElementById('res_open_con_perc').innerText = ((o_t10 / o_ts) * 100).toFixed(2);
-                document.getElementById('res_open_rp_perc').innerText = o_rpperc;
-                drawLocalChart('l9', 'localChart_9', 'bar', ['Top 10 Sales', 'Related Party Trans.'], [o_t10, o_rp], ['#6366f1', '#a855f7']);
+                const o_t10 = read('open_top10', 'Top-ten dealer sales');
+                const o_ts = read('open_totalsales', 'Total dealer sales');
+                const o_rp = read('open_rp', 'Related-party transactions');
+                const o_tc = read('open_totcat', 'Total related transaction category');
+                const concentrationPercentage = ESGCalculations.percentage(o_t10, o_ts, 'Top-ten concentration', 'Sales to Top 10 Partners', 'Total Sales');
+                const relatedPartyPercentage = ESGCalculations.percentage(o_rp, o_tc, 'Related-party transaction percentage', 'Related Party Transactions', 'Total Category Transactions');
+                show('res_open_con_perc', concentrationPercentage, 2);
+                show('res_open_rp_perc', relatedPartyPercentage, 2);
+                if (options.renderVisuals !== false) drawLocalChart('l9', 'localChart_9', 'bar', ['Top 10 Sales', 'Related Party Trans.'], [chartValue(o_t10), chartValue(o_rp)], ['#6366f1', '#a855f7']);
 
-                activeProj.years[activeProj.currentFY].metrics = { ghg: totalGHG, water: w_con, energy: parseFloat(e_perc), safety: parseFloat(saf_perc) };
-                
-                updateGlobalCharts((totalGHG / rev * 1000000).toFixed(2), (w_con / rev * 1000000).toFixed(2), (e_tot / rev * 1000000).toFixed(2), (wst_g / rev * 1000000).toFixed(2), e_perc, saf_perc, div_wperc, m_perc, o_rpperc);
-                
-                trackEvent('calculate_metrics', { 'revenue': rev, 'fte': hours });
-                renderAmbitions();
+                activeProj.years[activeProj.currentFY].metrics = { ghg: ghgResult.total, water: wConResult.value, energy: energyPercentage.value, safety: safetyPercentage.value };
 
-            } catch (error) { console.error("Calculation Error:", error); }
+                const scaledIntensity = value => value === null ? null : value * 1000000;
+                if (options.renderVisuals !== false) updateGlobalCharts(scaledIntensity(ghgIntensity.value), scaledIntensity(waterIntensity.value), scaledIntensity(energyIntensity.value), scaledIntensity(wasteIntensity.value), energyPercentage.value, safetyPercentage.value, diversityPercentage.value, msmePercentage.value, relatedPartyPercentage.value);
+
+                renderCalculationAlerts(errors);
+                if (options.renderVisuals !== false) renderAmbitions();
+                return true;
+
+            } catch (error) {
+                console.error("Calculation Error:", error);
+                if (typeof renderCalculationAlerts === 'function') renderCalculationAlerts(['Calculations could not finish. Reload the workspace and verify the imported data and browser dependencies.']);
+                return false;
+            }
         }
 
         function updateGlobalCharts(ghg, wat, eng, wst, pRen, pSafe, pDiv, pMsme, pRP) {
+            if (typeof Chart === 'undefined') return;
             const isDark = document.documentElement.classList.contains('dark');
             const gridColor = isDark ? '#334155' : '#e2e8f0';
 
@@ -1335,18 +1572,42 @@
         }
 
         // AMBITIONS LOGIC
-        const metricLabels = { 'ghg': 'Total GHG (tCO₂e)', 'water': 'Water Consumed (kL)', 'energy': 'Renewable Energy (%)', 'safety': 'Well-being Spend (%)' };
         
+        const targetDefinitions = {
+            ghg: { label: 'Total GHG (tCO₂e)', unit: 'tCO₂e', lower: true },
+            water: { label: 'Water Consumed (kL)', unit: 'kL', lower: true },
+            energy: { label: 'Renewable Energy (%)', unit: '%', lower: false },
+            safety: { label: 'Well-being Spend (%)', unit: '%', lower: false },
+            griGrossEmissions: { label: 'Gross Scope 1, 2 and 3', unit: 'tCO₂e', lower: true, result: 'grossEmissions' },
+            griNetEnergy: { label: 'Net Energy Consumption', unit: 'GJ', lower: true, result: 'netEnergy' },
+            griWaterConsumption: { label: 'Water Consumption', unit: 'ML', lower: true, result: 'waterConsumption' },
+            griWasteDiversion: { label: 'Waste Diversion Rate', unit: '%', lower: false, result: 'wasteDiversionRate' },
+            griEmployeeInjuryRate: { label: 'Employee Recordable Injury Rate', unit: 'rate', lower: true, result: 'employeeInjuryRate' },
+            griLocalProcurement: { label: 'Local Procurement', unit: '%', lower: false, result: 'localProcurement' }
+        };
+
+        function targetActual(project, ambition) {
+            const year = project.years[project.currentFY];
+            const definition = targetDefinitions[ambition.metric];
+            if (!year || !definition) return null;
+            if (!definition.result) return year.metrics?.[ambition.metric];
+            const values = { ...GRIMetrics.defaultValues(), ...(year.gri?.metrics || {}) };
+            return GRIMetrics.calculate(values).results[definition.result]?.value ?? null;
+        }
+
         function addAmbition() {
             const metric = document.getElementById('amb-metric').value;
             const year = document.getElementById('amb-year').value;
             const target = parseFloat(document.getElementById('amb-target').value);
-            if (year && !isNaN(target)) {
+            if (year && Number.isFinite(target) && target >= 0) {
                 appData.projects[appData.activeHash].ambitions.push({ id: Date.now(), metric, year, target });
                 document.getElementById('amb-year').value = '';
                 document.getElementById('amb-target').value = '';
                 saveDOMToFY();
                 renderAmbitions();
+                if (appData.projects[appData.activeHash].framework === 'gri' && typeof renderOverview === 'function') renderOverview();
+            } else {
+                alert('Enter a target year and a target value of zero or more.');
             }
         }
 
@@ -1355,6 +1616,7 @@
             activeProj.ambitions = activeProj.ambitions.filter(a => a.id !== id); 
             saveDOMToFY(); 
             renderAmbitions(); 
+            if (activeProj.framework === 'gri' && typeof renderOverview === 'function') renderOverview();
         }
 
         function renderAmbitions() {
@@ -1365,35 +1627,36 @@
             let activeProj = appData.projects[appData.activeHash];
             if(!activeProj) return;
 
-            const currentMetrics = activeProj.years[activeProj.currentFY]?.metrics || {ghg:0, water:0, energy:0, safety:0};
-
             if(activeProj.ambitions.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-center p-6 text-slate-500 border border-dashed rounded dark:border-slate-700">Define ambitions in the Ambitions tab to see tracking cards here.</div>';
+                grid.innerHTML = '<div class="col-span-full text-center p-6 text-slate-500 border border-dashed rounded dark:border-slate-700">Define ambitions to see tracking cards here.</div>';
                 return;
             }
 
             activeProj.ambitions.forEach(amb => {
-                const actual = currentMetrics[amb.metric] || 0;
-                const isLowerBetter = ['ghg', 'water'].includes(amb.metric);
-                const onTrack = isLowerBetter ? (actual <= amb.target) : (actual >= amb.target);
+                const definition = targetDefinitions[amb.metric] || { label: 'Unknown target metric', unit: '', lower: false };
+                const actual = targetActual(activeProj, amb);
+                const hasActual = Number.isFinite(actual);
+                const isLowerBetter = definition.lower;
+                const onTrack = hasActual && (isLowerBetter ? (actual <= amb.target) : (actual >= amb.target));
                 
-                let perc = amb.target === 0 ? 0 : (actual / amb.target) * 100;
+                let perc = !hasActual || amb.target === 0 ? 0 : (actual / amb.target) * 100;
                 if(perc > 100) perc = 100;
 
-                const statusColor = onTrack ? 'text-emerald-500' : 'text-red-500';
-                const barColor = onTrack ? 'bg-emerald-500' : 'bg-red-500';
+                const statusColor = !hasActual ? 'text-slate-500' : onTrack ? 'text-emerald-500' : 'text-red-500';
+                const barColor = !hasActual ? 'bg-slate-400' : onTrack ? 'bg-emerald-500' : 'bg-red-500';
+                const actualDisplay = hasActual ? actual.toLocaleString(undefined, {maximumFractionDigits:2}) : 'Enter metric inputs';
 
                 // Table Row
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800/50";
                 tr.innerHTML = `
-                    <td class="p-4 font-medium">${metricLabels[amb.metric]}</td>
-                    <td class="p-4">${amb.year}</td>
-                    <td class="p-4 font-mono">${actual.toLocaleString(undefined, {maximumFractionDigits:2})}</td>
+                    <td class="p-4 font-medium">${definition.label}</td>
+                        <td class="p-4">${escapeMarkup(amb.year)}</td>
+                        <td class="p-4 font-mono">${actualDisplay}</td>
                     <td class="p-4 font-mono">${amb.target.toLocaleString()}</td>
                     <td class="p-4">
                         <div class="flex items-center gap-3">
-                            <span class="${statusColor} font-bold text-sm w-16">${onTrack ? 'On Track' : 'Off Track'}</span>
+                            <span class="${statusColor} font-bold text-sm w-24">${!hasActual ? 'Enter inputs' : onTrack ? 'On Track' : 'Off Track'}</span>
                             <div class="flex-1 target-bar-bg"><div class="target-bar-fill ${barColor}" style="width: ${perc}%"></div><div class="target-bar-marker" style="left: 100%"></div></div>
                         </div>
                     </td>
@@ -1402,15 +1665,14 @@
                 list.appendChild(tr);
 
                 // KPI Dashboard Card
-                const unit = ['ghg', 'water'].includes(amb.metric) ? (amb.metric === 'ghg' ? 't' : 'kL') : '%';
+                const unit = definition.unit;
                 const iconClass = onTrack ? (isLowerBetter ? 'fa-caret-down' : 'fa-caret-up') : (isLowerBetter ? 'fa-caret-up' : 'fa-caret-down');
                 const card = `
                     <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-col justify-between">
-                        <div class="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">${metricLabels[amb.metric]}</div>
-                        <div class="text-xs text-slate-400 mb-4">Target: ${amb.year}</div>
+                        <div class="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-1">${definition.label}</div>
+                        <div class="text-xs text-slate-400 mb-4">Target: ${escapeMarkup(amb.year)}</div>
                         <div class="text-4xl font-light flex items-center">
-                            ${actual.toLocaleString(undefined, {maximumFractionDigits:2})} <span class="text-xl ml-1 text-slate-400">${unit}</span>
-                            <i class="fa-solid ${iconClass} ${statusColor} ml-2 text-xl"></i>
+                            ${actualDisplay} ${hasActual ? `<span class="text-xl ml-1 text-slate-400">${unit}</span><i class="fa-solid ${iconClass} ${statusColor} ml-2 text-xl"></i>` : ''}
                         </div>
                         <div class="mt-4">
                             <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1"><span>Actual</span><span>Target: ${amb.target.toLocaleString()}</span></div>
@@ -1427,7 +1689,7 @@
             loadState();
             
             if (!appData.activeHash || Object.keys(appData.projects).length === 0) {
-                createDefaultProjectData('Untitled Project');
+                createDefaultProjectData('Sample Workspace', true);
             }
             
             renderProjectTabs();
